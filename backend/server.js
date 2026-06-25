@@ -41,20 +41,26 @@ app.use(
 );
 
 const allowedOrigins = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
+  ? process.env.CLIENT_URL.split(',').map((o) => o.trim().replace(/\/$/, ''))
   : ['http://localhost:5173'];
 
 app.use(
   cors({
     origin: (origin, callback) => {
       if (!origin) return callback(null, true);
+      
+      const cleanOrigin = origin.trim().replace(/\/$/, '');
       const isAllowed = allowedOrigins.some((allowed) => {
         if (allowed === '*') return true;
-        return origin === allowed || origin.endsWith(allowed.replace(/^https?:\/\//, '.'));
+        if (cleanOrigin === allowed) return true;
+        const domainOnly = allowed.replace(/^https?:\/\//, '');
+        return cleanOrigin.endsWith('.' + domainOnly);
       });
+
       if (isAllowed) {
         callback(null, true);
       } else {
+        console.warn(`[CORS Blocked] Origin "${origin}" is not in the allowed list:`, allowedOrigins);
         callback(new Error('Not allowed by CORS'));
       }
     },
