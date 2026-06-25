@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Sparkles } from 'lucide-react';
 import Input from '../components/common/Input.jsx';
 import Button from '../components/common/Button.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import api from '../api/axios.js';
 import toast from 'react-hot-toast';
 
 const LoginPage = () => {
@@ -13,6 +14,28 @@ const LoginPage = () => {
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [isOnline, setIsOnline] = useState(false);
+
+  useEffect(() => {
+    let interval;
+    const checkHealth = async () => {
+      try {
+        const res = await api.get('/health');
+        if (res.data && res.data.status === 'ok') {
+          setIsOnline(true);
+          clearInterval(interval);
+        }
+      } catch (err) {
+        setIsOnline(false);
+      }
+    };
+
+    checkHealth();
+    // Check every 5 seconds to wake up sleep mode on free instances (e.g. Render)
+    interval = setInterval(checkHealth, 5000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const validate = () => {
     const e = {};
@@ -56,6 +79,13 @@ const LoginPage = () => {
           <p className="text-[var(--color-text-faint)] text-sm mt-1">
             Kampüs sosyal ağına hoş geldin
           </p>
+
+          <div className="flex items-center gap-1.5 mt-4 px-3 py-1 rounded-full text-xs font-medium border border-[var(--color-border)] bg-[var(--color-surface)]/80 backdrop-blur-md shadow-sm transition-all duration-300">
+            <span className={`w-2 h-2 rounded-full ${isOnline ? 'bg-emerald-500' : 'bg-amber-500 animate-pulse'}`} />
+            <span className={isOnline ? 'text-emerald-600' : 'text-amber-600'}>
+              {isOnline ? 'Online' : 'Bağlanıyor...'}
+            </span>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="glass p-8 space-y-5">
