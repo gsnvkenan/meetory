@@ -46,6 +46,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({});
     const e2 = validate();
     if (Object.keys(e2).length) { setErrors(e2); return; }
 
@@ -55,7 +56,16 @@ const LoginPage = () => {
       toast.success('Hoş geldin! 🎉');
       navigate('/feed');
     } catch (err) {
-      toast.error(err?.response?.data?.message || 'Giriş başarısız');
+      const msg = err?.response?.data?.message || 'Giriş başarısız';
+      toast.error(msg);
+      
+      if (msg.includes('Kullanıcı adı') || msg.includes('E-posta') || msg.includes('kullanıcı')) {
+        setErrors({ email: msg });
+      } else if (msg.includes('Şifre') || msg.includes('şifre') || msg.includes('password')) {
+        setErrors({ password: msg });
+      } else {
+        setErrors({ email: msg });
+      }
     } finally {
       setLoading(false);
     }
