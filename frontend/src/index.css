@@ -1,229 +1,386 @@
 @import "tailwindcss";
 
 @theme {
-  /* Scale down border radiuses globally */
-  --radius-3xl: 0.75rem; /* was 1.5rem */
-  --radius-2xl: 0.5rem;  /* was 1.0rem */
-  --radius-xl: 0.375rem; /* was 0.75rem */
-  --radius-lg: 0.25rem;  /* was 0.5rem */
-  --radius-md: 0.1875rem;/* was 0.375rem */
-  --radius-sm: 0.125rem; /* was 0.25rem */
+    /* ── Border radius scale — modern, balanced, not overly rounded ── */
+    --radius-3xl: 1.25rem;
+    --radius-2xl: 1rem;
+    --radius-xl: 0.875rem;
+    --radius-lg: 0.625rem;
+    --radius-md: 0.5rem;
+    --radius-sm: 0.375rem;
 
-  /* Map indigo to premium blue shades */
-  --color-indigo-50: #eff6ff;
-  --color-indigo-100: #dbeafe;
-  --color-indigo-200: #bfdbfe;
-  --color-indigo-300: #93c5fd;
-  --color-indigo-400: #60a5fa;
-  --color-indigo-500: #3b82f6;
-  --color-indigo-600: #2563eb;
-  --color-indigo-700: #1d4ed8;
-  --color-indigo-800: #1e40af;
-  --color-indigo-900: #1e3a8a;
-  --color-indigo-950: #172554;
+    /* ── Elevation system — soft, realistic shadows used app-wide ── */
+    --shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.04);
+    --shadow-sm:
+        0 1px 3px 0 rgba(15, 23, 42, 0.05),
+        0 1px 2px -1px rgba(15, 23, 42, 0.04);
+    --shadow-md:
+        0 6px 16px -4px rgba(15, 23, 42, 0.08),
+        0 2px 6px -2px rgba(15, 23, 42, 0.05);
+    --shadow-lg:
+        0 14px 30px -8px rgba(15, 23, 42, 0.12),
+        0 4px 10px -4px rgba(15, 23, 42, 0.06);
+    --shadow-xl:
+        0 24px 48px -12px rgba(15, 23, 42, 0.16),
+        0 8px 16px -8px rgba(15, 23, 42, 0.06);
+    --shadow-2xl: 0 32px 64px -16px rgba(15, 23, 42, 0.22);
 
-  /* Map violet to sky shades */
-  --color-violet-50: #f0f9ff;
-  --color-violet-100: #e0f2fe;
-  --color-violet-200: #bae6fd;
-  --color-violet-300: #7dd3fc;
-  --color-violet-400: #38bdf8;
-  --color-violet-500: #0ea5e9;
-  --color-violet-600: #0284c7;
-  --color-violet-700: #0369a1;
-  --color-violet-800: #075985;
-  --color-violet-900: #0c4a6e;
-  --color-violet-950: #082f49;
+    /* Map indigo to premium blue shades (brand) */
+    --color-indigo-50: #eff6ff;
+    --color-indigo-100: #dbeafe;
+    --color-indigo-200: #bfdbfe;
+    --color-indigo-300: #93c5fd;
+    --color-indigo-400: #4c8ef7;
+    --color-indigo-500: #2f6fed;
+    --color-indigo-600: #2258d6;
+    --color-indigo-700: #1c46ad;
+    --color-indigo-800: #1b3a87;
+    --color-indigo-900: #1a316a;
+    --color-indigo-950: #101d40;
+
+    /* Map violet to a refined purple-blue accent */
+    --color-violet-50: #f4f4ff;
+    --color-violet-100: #e7e6ff;
+    --color-violet-200: #d1cfff;
+    --color-violet-300: #b1abff;
+    --color-violet-400: #8f7bfa;
+    --color-violet-500: #7458f0;
+    --color-violet-600: #6440d9;
+    --color-violet-700: #5232b3;
+    --color-violet-800: #422b8a;
+    --color-violet-900: #362668;
+    --color-violet-950: #1f1540;
 }
 
 @layer base {
-  :root {
-    /* Brand palette (Clean Blue theme) */
-    --color-primary: #2563eb;
-    --color-primary-dark: #1d4ed8;
-    --color-primary-light: #3b82f6;
-    --color-accent: #60a5fa;
-    --color-success: #10b981;
-    --color-warning: #f59e0b;
-    --color-danger: #ef4444;
+    :root {
+        /* Brand palette (Premium Blue theme) */
+        --color-primary: #2258d6;
+        --color-primary-dark: #1c46ad;
+        --color-primary-light: #2f6fed;
+        --color-accent: #7458f0;
+        --color-success: #12b76a;
+        --color-warning: #f59e0b;
+        --color-danger: #f04438;
 
-    /* Surface (Premium White/Light theme) */
-    --color-bg: #f8fafc;            /* Clean off-white background */
-    --color-surface: #ffffff;       /* Pure white panels/cards */
-    --color-surface-2: #f1f5f9;     /* Light slate for inputs/hover cards */
-    --color-surface-3: #e2e8f0;     /* Muted slate for active tabs/borders */
-    --color-border: #e2e8f0;        /* Subtle crisp border lines */
+        /* Surface (Premium White/Light theme) */
+        --color-bg: #f6f7fb; /* Soft cool-gray canvas background */
+        --color-surface: #ffffff; /* Pure white panels/cards */
+        --color-surface-2: #f1f3f9; /* Light slate for inputs/hover cards */
+        --color-surface-3: #e7eaf3; /* Muted slate for active tabs/borders */
+        --color-border: #e6e8f0; /* Subtle crisp border lines */
 
-    /* Text */
-    --color-text: #0f172a;          /* Rich slate-900 for high contrast readability */
-    --color-text-muted: #475569;    /* slate-600 for body copy */
-    --color-text-faint: #94a3b8;    /* slate-400 for subtext */
-  }
+        /* Text */
+        --color-text: #0e1526; /* Rich near-black for high contrast readability */
+        --color-text-muted: #4b5468; /* Balanced body copy gray */
+        --color-text-faint: #8a92a6; /* Subtext / placeholder gray */
+    }
 
-  * {
-    box-sizing: border-box;
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
-  }
+    * {
+        box-sizing: border-box;
+        scrollbar-width: thin;
+        scrollbar-color: #cbd2e0 transparent;
+    }
 
-  *::-webkit-scrollbar {
-    width: 6px;
-  }
-  *::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  *::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 999px;
-  }
+    *::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+    }
+    *::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    *::-webkit-scrollbar-thumb {
+        background: #cbd2e0;
+        border-radius: 999px;
+    }
+    *::-webkit-scrollbar-thumb:hover {
+        background: #aab2c5;
+    }
 
-  html {
-    font-size: 16px;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+    html {
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
 
-  body {
-    background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: 'Inter', 'Outfit', system-ui, sans-serif;
-    min-height: 100dvh;
-  }
+    body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        font-family: "Inter", "Outfit", system-ui, sans-serif;
+        min-height: 100dvh;
+    }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
+    a {
+        color: inherit;
+        text-decoration: none;
+    }
 
-  button {
-    cursor: pointer;
-  }
+    button {
+        cursor: pointer;
+    }
+
+    /* Consistent focus ring for accessibility without being intrusive */
+    :focus-visible {
+        outline: 2px solid rgba(34, 88, 214, 0.45);
+        outline-offset: 2px;
+    }
 }
 
 @layer components {
-  /* ── Glass card (Adapted for Light Theme) ───────── */
-  .glass {
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(37, 99, 235, 0.08);
-    border-radius: 0.5rem;
-  }
+    /* ── Solid elevated card — the primary surface for the whole app ── */
+    .card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-2xl);
+        box-shadow: var(--shadow-sm);
+    }
 
-  /* ── Gradient text ─────────────────────────────── */
-  .gradient-text {
-    background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+    .card-hover {
+        transition:
+            transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+            box-shadow 0.2s ease,
+            border-color 0.2s ease;
+    }
+    .card-hover:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: rgba(34, 88, 214, 0.16);
+    }
 
-  /* ── Glow button ───────────────────────────────── */
-  .btn-glow {
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
-    transition: box-shadow 0.2s ease, transform 0.15s ease;
-  }
-  .btn-glow:hover {
-    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.25);
-    transform: translateY(-1px);
-  }
-  .btn-glow:active {
-    transform: translateY(0);
-  }
+    /* ── Glass surface — reserved for overlays: headers, sidebars, modals ── */
+    .glass {
+        background: rgba(255, 255, 255, 0.78);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid rgba(15, 23, 42, 0.06);
+        border-radius: var(--radius-2xl);
+    }
 
-  /* ── Sidebar nav item ──────────────────────────── */
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    padding: 0.65rem 1rem;
-    border-radius: 0.375rem;
-    color: var(--color-text-muted);
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  .nav-item:hover {
-    background: rgba(37, 99, 235, 0.05);
-    color: var(--color-primary);
-  }
-  .nav-item.active {
-    background: rgba(37, 99, 235, 0.08);
-    color: var(--color-primary);
-  }
+    /* ── Gradient text ─────────────────────────────── */
+    .gradient-text {
+        background: linear-gradient(
+            135deg,
+            #1c46ad 0%,
+            #2258d6 45%,
+            #7458f0 100%
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
 
-  /* ── Input ─────────────────────────────────────── */
-  .input-base {
-    background: #ffffff;
-    border: 1px solid var(--color-border);
-    border-radius: 0.375rem;
-    color: var(--color-text);
-    padding: 0.65rem 1rem;
-    width: 100%;
-    outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    font-size: 0.9rem;
-  }
-  .input-base::placeholder {
-    color: var(--color-text-faint);
-  }
-  .input-base:focus {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-  }
+    /* ── Brand mark badge (logo) ──────────────────── */
+    .brand-badge {
+        background: linear-gradient(
+            135deg,
+            #2258d6 0%,
+            #4c6ef0 55%,
+            #7458f0 100%
+        );
+        box-shadow: 0 8px 20px -4px rgba(34, 88, 214, 0.45);
+    }
 
-  /* ── Avatar ring ───────────────────────────────── */
-  .avatar-ring {
-    ring: 2px;
-    ring-color: var(--color-primary);
-    ring-offset-color: var(--color-bg);
-    ring-offset-width: 2px;
-  }
+    /* ── Glow button ───────────────────────────────── */
+    .btn-glow {
+        box-shadow: 0 4px 14px -2px rgba(34, 88, 214, 0.3);
+        transition:
+            box-shadow 0.2s ease,
+            transform 0.15s ease,
+            background-color 0.2s ease;
+    }
+    .btn-glow:hover {
+        box-shadow: 0 8px 20px -4px rgba(34, 88, 214, 0.38);
+        transform: translateY(-1px);
+    }
+    .btn-glow:active {
+        transform: translateY(0);
+    }
 
-  /* ── Skeleton loading ──────────────────────────── */
-  .skeleton {
-    background: linear-gradient(
-      90deg,
-      var(--color-surface-2) 25%,
-      var(--color-surface-3) 50%,
-      var(--color-surface-2) 75%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-    border-radius: 0.25rem;
-  }
+    /* ── Sidebar / nav pill item ───────────────────── */
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: 0.875rem;
+        padding: 0.7rem 1rem;
+        border-radius: 999px;
+        color: var(--color-text-muted);
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition:
+            background-color 0.18s ease,
+            color 0.18s ease;
+    }
+    .nav-item:hover {
+        background: var(--color-surface-2);
+        color: var(--color-text);
+    }
+    .nav-item.active {
+        background: rgba(34, 88, 214, 0.1);
+        color: var(--color-primary);
+        font-weight: 700;
+    }
 
-  @keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-  }
+    /* ── Input ─────────────────────────────────────── */
+    .input-base {
+        background: var(--color-surface-2);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        color: var(--color-text);
+        padding: 0.65rem 1rem;
+        width: 100%;
+        outline: none;
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            background-color 0.2s;
+        font-size: 0.9rem;
+    }
+    .input-base::placeholder {
+        color: var(--color-text-faint);
+    }
+    .input-base:focus {
+        background: var(--color-surface);
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(34, 88, 214, 0.12);
+    }
 
-  /* ── Fade in ───────────────────────────────────── */
-  .fade-in {
-    animation: fadeIn 0.35s ease forwards;
-  }
+    /* ── Avatar ring ───────────────────────────────── */
+    .avatar-ring {
+        ring: 2px;
+        ring-color: var(--color-primary);
+        ring-offset-color: var(--color-bg);
+        ring-offset-width: 2px;
+    }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+    /* ── Tag / badge chips ─────────────────────────── */
+    .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        line-height: 1;
+        padding: 0.32rem 0.65rem;
+        border-radius: 999px;
+        border: 1px solid transparent;
+        white-space: nowrap;
+    }
+    .chip-blue {
+        background: rgba(34, 88, 214, 0.08);
+        color: var(--color-primary);
+        border-color: rgba(34, 88, 214, 0.18);
+    }
+    .chip-violet {
+        background: rgba(116, 88, 240, 0.08);
+        color: #6440d9;
+        border-color: rgba(116, 88, 240, 0.18);
+    }
+    .chip-emerald {
+        background: rgba(18, 183, 106, 0.09);
+        color: #0d9257;
+        border-color: rgba(18, 183, 106, 0.18);
+    }
+    .chip-amber {
+        background: rgba(245, 158, 11, 0.1);
+        color: #b45309;
+        border-color: rgba(245, 158, 11, 0.2);
+    }
+    .chip-rose {
+        background: rgba(240, 68, 56, 0.08);
+        color: #c62f24;
+        border-color: rgba(240, 68, 56, 0.18);
+    }
+    .chip-slate {
+        background: var(--color-surface-3);
+        color: var(--color-text-muted);
+        border-color: var(--color-border);
+    }
 
-  /* ── Pulse dot (online indicator) ─────────────── */
-  .pulse-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--color-success);
-    animation: pulse 2s infinite;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.7; }
-  }
+    /* ── Skeleton loading ──────────────────────────── */
+    .skeleton {
+        background: linear-gradient(
+            90deg,
+            var(--color-surface-2) 25%,
+            var(--color-surface-3) 50%,
+            var(--color-surface-2) 75%
+        );
+        background-size: 200% 100%;
+        animation: shimmer 1.5s infinite;
+        border-radius: var(--radius-md);
+    }
 
-  /* ── Story ring gradient ───────────────────────── */
-  .story-ring {
-    background: linear-gradient(135deg, #2563eb, #3b82f6, #60a5fa);
-    padding: 2px;
-    border-radius: 50%;
-  }
+    @keyframes shimmer {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
+
+    /* ── Fade in ───────────────────────────────────── */
+    .fade-in {
+        animation: fadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ── Scale in (lightbox, popovers) ─────────────── */
+    .scale-in {
+        animation: scaleIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes scaleIn {
+        from {
+            opacity: 0;
+            transform: scale(0.94);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* ── Pulse dot (online indicator) ─────────────── */
+    .pulse-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--color-success);
+        animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+        0%,
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.3);
+            opacity: 0.7;
+        }
+    }
+
+    /* ── Story ring gradient ───────────────────────── */
+    .story-ring {
+        background: linear-gradient(135deg, #2258d6, #4c6ef0, #7458f0);
+        padding: 2px;
+        border-radius: 50%;
+    }
+
+    /* ── Section heading used across pages ─────────── */
+    .page-heading {
+        font-family: "Outfit", "Inter", sans-serif;
+        font-weight: 800;
+        letter-spacing: -0.01em;
+    }
 }

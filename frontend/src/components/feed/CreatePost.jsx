@@ -1,17 +1,17 @@
-import { useState, useRef } from 'react';
-import { Image, Video, X, Send, Globe, Users } from 'lucide-react';
-import Avatar from '../common/Avatar.jsx';
-import Button from '../common/Button.jsx';
-import { postApi } from '../../api/index.js';
-import { useAuth } from '../../context/AuthContext.jsx';
-import toast from 'react-hot-toast';
+import { useState, useRef } from "react";
+import { Image, Video, X, Send, Globe, Users } from "lucide-react";
+import Avatar from "../common/Avatar.jsx";
+import Button from "../common/Button.jsx";
+import { postApi } from "../../api/index.js";
+import { useAuth } from "../../context/AuthContext.jsx";
+import toast from "react-hot-toast";
 
 const CreatePost = ({ onCreated }) => {
   const { user } = useAuth();
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const [visibility, setVisibility] = useState('public');
+  const [visibility, setVisibility] = useState("public");
   const [loading, setLoading] = useState(false);
   const fileRef = useRef();
 
@@ -20,7 +20,7 @@ const CreatePost = ({ onCreated }) => {
     setFiles((p) => [...p, ...selected]);
     const newPreviews = selected.map((f) => ({
       url: URL.createObjectURL(f),
-      type: f.type.startsWith('video') ? 'video' : 'image',
+      type: f.type.startsWith("video") ? "video" : "image",
     }));
     setPreviews((p) => [...p, ...newPreviews]);
   };
@@ -37,50 +37,57 @@ const CreatePost = ({ onCreated }) => {
     setLoading(true);
     try {
       const formData = new FormData();
-      formData.append('content', content);
-      formData.append('visibility', visibility);
-      files.forEach((f) => formData.append('media', f));
+      formData.append("content", content);
+      formData.append("visibility", visibility);
+      files.forEach((f) => formData.append("media", f));
 
       const { data } = await postApi.createPost(formData);
       onCreated?.(data.post);
-      setContent('');
+      setContent("");
       setFiles([]);
       setPreviews([]);
-      toast.success('Gönderi paylaşıldı!');
+      toast.success("Gönderi paylaşıldı!");
     } catch {
-      toast.error('Gönderi paylaşılamadı');
+      toast.error("Gönderi paylaşılamadı");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="glass p-5">
-      <div className="flex gap-3">
-        <Avatar src={user?.avatar} name={user?.name} size="sm" />
-        <div className="flex-1">
+    <form onSubmit={handleSubmit} className="card p-5">
+      <div className="flex gap-3.5">
+        <Avatar src={user?.avatar} name={user?.name} size="md" />
+        <div className="flex-1 min-w-0">
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Kampüste ne var? Paylaş..."
             rows={3}
-            className="w-full bg-transparent text-sm resize-none outline-none text-[var(--color-text)] placeholder:text-[var(--color-text-faint)]"
+            className="w-full bg-transparent text-[15px] leading-relaxed resize-none outline-none text-[var(--color-text)] placeholder:text-[var(--color-text-faint)]"
           />
 
           {/* Media previews */}
           {previews.length > 0 && (
-            <div className="grid grid-cols-3 gap-2 mt-3">
+            <div className="grid grid-cols-3 gap-2 mt-2">
               {previews.map((p, i) => (
-                <div key={i} className="relative rounded-lg overflow-hidden aspect-square">
-                  {p.type === 'video' ? (
+                <div
+                  key={i}
+                  className="relative rounded-xl overflow-hidden aspect-square border border-[var(--color-border)] group"
+                >
+                  {p.type === "video" ? (
                     <video src={p.url} className="w-full h-full object-cover" />
                   ) : (
-                    <img src={p.url} alt="" className="w-full h-full object-cover" />
+                    <img
+                      src={p.url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                    />
                   )}
                   <button
                     type="button"
                     onClick={() => removeFile(i)}
-                    className="absolute top-1 right-1 bg-black/60 rounded-full p-0.5 text-white"
+                    className="absolute top-1.5 right-1.5 bg-black/60 hover:bg-black/75 rounded-full p-1 text-white transition-colors"
                   >
                     <X size={12} />
                   </button>
@@ -89,23 +96,23 @@ const CreatePost = ({ onCreated }) => {
             </div>
           )}
 
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-[var(--color-border)]">
-            <div className="flex items-center gap-2">
+          <div className="flex items-center justify-between mt-4 pt-3.5 border-t border-[var(--color-border)]">
+            <div className="flex items-center gap-1">
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="p-2 rounded-lg text-[var(--color-text-faint)] hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors"
+                className="p-2.5 rounded-full text-indigo-500 hover:bg-indigo-500/10 transition-colors"
                 title="Fotoğraf ekle"
               >
-                <Image size={18} />
+                <Image size={19} />
               </button>
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="p-2 rounded-lg text-[var(--color-text-faint)] hover:text-indigo-400 hover:bg-indigo-500/10 transition-colors"
+                className="p-2.5 rounded-full text-indigo-500 hover:bg-indigo-500/10 transition-colors"
                 title="Video ekle"
               >
-                <Video size={18} />
+                <Video size={19} />
               </button>
               <input
                 ref={fileRef}
@@ -120,14 +127,20 @@ const CreatePost = ({ onCreated }) => {
               <button
                 type="button"
                 onClick={() =>
-                  setVisibility((p) => (p === 'public' ? 'followers' : 'public'))
+                  setVisibility((p) =>
+                    p === "public" ? "followers" : "public",
+                  )
                 }
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs text-[var(--color-text-faint)] hover:bg-[var(--color-surface-3)] transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 ml-1 rounded-full text-xs font-semibold text-[var(--color-text-faint)] hover:bg-[var(--color-surface-2)] hover:text-[var(--color-text-muted)] transition-colors"
               >
-                {visibility === 'public' ? (
-                  <><Globe size={13} /> Genel</>
+                {visibility === "public" ? (
+                  <>
+                    <Globe size={13} /> Genel
+                  </>
                 ) : (
-                  <><Users size={13} /> Takipçiler</>
+                  <>
+                    <Users size={13} /> Takipçiler
+                  </>
                 )}
               </button>
             </div>

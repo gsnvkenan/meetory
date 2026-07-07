@@ -1,24 +1,26 @@
-import { useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
 
-const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
+const Modal = ({ isOpen, onClose, title, children, size = "md" }) => {
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = '';
+      document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ''; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [isOpen]);
 
   if (!isOpen) return null;
 
   const sizes = {
-    sm: 'max-w-sm',
-    md: 'max-w-lg',
-    lg: 'max-w-2xl',
-    xl: 'max-w-4xl',
+    sm: "max-w-sm",
+    md: "max-w-lg",
+    lg: "max-w-2xl",
+    xl: "max-w-4xl",
   };
 
   return createPortal(
@@ -29,25 +31,25 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
     >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-[#0e1526]/55 backdrop-blur-sm"
         onClick={onClose}
       />
 
       {/* Dialog */}
       <div
         className={`
-          relative glass w-full ${sizes[size]} max-h-[90vh] overflow-y-auto
-          fade-in p-6 shadow-2xl
-          shadow-[0_0_60px_rgba(99,102,241,0.15)]
+          relative bg-[var(--color-surface)] border border-[var(--color-border)]
+          w-full ${sizes[size]} max-h-[90vh] overflow-y-auto
+          scale-in p-6 rounded-3xl shadow-2xl
         `}
       >
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-lg font-semibold text-[var(--color-text)]">
+          <h2 className="text-lg font-bold page-heading text-[var(--color-text)]">
             {title}
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-[var(--color-surface-3)] transition-colors text-[var(--color-text-muted)]"
+            className="p-1.5 rounded-full hover:bg-[var(--color-surface-2)] transition-colors text-[var(--color-text-muted)]"
           >
             <X size={18} />
           </button>
@@ -55,7 +57,7 @@ const Modal = ({ isOpen, onClose, title, children, size = 'md' }) => {
         {children}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 

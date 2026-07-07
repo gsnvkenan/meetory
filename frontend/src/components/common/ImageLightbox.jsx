@@ -1,6 +1,6 @@
-import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
-import { useLightboxStore } from '../../context/useLightboxStore.js';
+import { createPortal } from "react-dom";
+import { X } from "lucide-react";
+import { useLightboxStore } from "../../context/useLightboxStore.js";
 
 const ImageLightbox = () => {
   const { isOpen, src, closeLightbox } = useLightboxStore();
@@ -8,32 +8,32 @@ const ImageLightbox = () => {
   if (!isOpen || !src) return null;
 
   return createPortal(
-    <div 
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-4 transition-all duration-300"
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-[#0a0e1a]/92 backdrop-blur-md p-4 transition-all duration-300"
       onClick={closeLightbox}
     >
       {/* Close Button */}
       <button
         onClick={closeLightbox}
-        className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
+        className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
         aria-label="Kapat"
       >
-        <X size={24} />
+        <X size={22} />
       </button>
 
       {/* Image Container */}
-      <div 
+      <div
         className="relative max-w-full max-h-[90vh] flex items-center justify-center"
-        onClick={(e) => e.stopPropagation()} // Prevent close when clicking the image
+        onClick={(e) => e.stopPropagation()}
       >
         <img
           src={src}
           alt="Büyütülmüş önizleme"
-          className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl scale-in"
+          className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl scale-in"
         />
       </div>
     </div>,
-    document.body
+    document.body,
   );
 };
 
