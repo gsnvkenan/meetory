@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Send, ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
-import { tr } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import Avatar from "../common/Avatar.jsx";
 import { chatApi } from "../../api/index.js";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -104,7 +104,7 @@ const ChatWindow = ({ conversation, onBack }) => {
   };
 
   const groupedMessages = messages.reduce((acc, msg) => {
-    const day = format(new Date(msg.createdAt), "d MMMM yyyy", { locale: tr });
+    const day = format(new Date(msg.createdAt), "d MMMM yyyy", { locale: enUS });
     if (!acc[day]) acc[day] = [];
     acc[day].push(msg);
     return acc;
@@ -141,7 +141,7 @@ const ChatWindow = ({ conversation, onBack }) => {
             <span
               className={`text-xs font-medium ${online ? "text-[var(--color-success)]" : "text-[var(--color-text-faint)]"}`}
             >
-              {online ? "Çevrimiçi" : "Çevrimdışı"}
+              {online ? "Online" : "Offline"}
             </span>
           </div>
         </div>
@@ -180,7 +180,7 @@ const ChatWindow = ({ conversation, onBack }) => {
                           max-w-[75%] sm:max-w-xs px-4 py-2.5 rounded-2xl text-sm shadow-sm
                           ${
                             isMine
-                              ? "bg-gradient-to-br from-[var(--color-primary)] to-violet-600 text-white rounded-br-md"
+                              ? "bg-blue-500 text-white rounded-br-md"
                               : "bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text)] rounded-bl-md"
                           }
                           ${msg._temp ? "opacity-60" : ""}
@@ -234,13 +234,13 @@ const ChatWindow = ({ conversation, onBack }) => {
           type="text"
           value={input}
           onChange={handleInput}
-          placeholder="Mesaj yaz..."
+          placeholder="Write a message..."
           className="input-base rounded-full flex-1 px-4"
         />
         <button
           type="submit"
           disabled={!input.trim()}
-          className="w-11 h-11 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-violet-600 hover:brightness-110 disabled:opacity-40 disabled:hover:brightness-100 text-white flex items-center justify-center transition-all shrink-0 btn-glow"
+          className="w-11 h-11 rounded-full bg-blue-500 hover:bg-blue-600 disabled:opacity-40 disabled:hover:bg-blue-500 text-white flex items-center justify-center transition-all shrink-0 btn-glow"
         >
           <Send size={17} />
         </button>

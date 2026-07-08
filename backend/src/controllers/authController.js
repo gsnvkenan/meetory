@@ -59,12 +59,12 @@ export const login = async (req, res, next) => {
 
     const user = await User.findOne({ email }).select('+password +refreshToken');
     if (!user) {
-      return res.status(401).json({ message: 'Kullanıcı adı yanlış' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Şifre yanlış' });
+      return res.status(401).json({ message: 'Invalid email or password' });
     }
 
     const accessToken = generateAccessToken(user._id);

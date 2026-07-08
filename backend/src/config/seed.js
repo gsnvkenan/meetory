@@ -32,11 +32,11 @@ const seedData = async () => {
         username: 'kenan_hasanov',
         email: 'kenan@itu.edu.tr',
         password: 'password123',
-        university: 'İTÜ',
-        department: 'Bilgisayar Mühendisliği',
+        university: 'ITU',
+        department: 'Computer Engineering',
         year: 3,
-        bio: 'Yazılım geliştirmeyi ve yeni teknolojiler keşfetmeyi seviyorum. React & Node.js hayranıyım! 🚀',
-        interests: ['Kodlama', 'Yapay Zeka', 'Müzik', 'Sinema'],
+        bio: 'I love software development and discovering new technologies. I am a React & Node.js fan! 🚀',
+        interests: ['Coding', 'AI', 'Music', 'Cinema'],
         courses: ['BLG312', 'BLG336', 'MAT271'],
         isVerified: true,
       },
@@ -45,11 +45,11 @@ const seedData = async () => {
         username: 'elif_yilmaz',
         email: 'elif@itu.edu.tr',
         password: 'password123',
-        university: 'İTÜ',
-        department: 'Bilgisayar Mühendisliği',
+        university: 'ITU',
+        department: 'Computer Engineering',
         year: 2,
-        bio: 'Kahve sever, amatör fotoğrafçı ve gelecek vaat eden bir yapay zeka mühendisi. ☕📸',
-        interests: ['Yapay Zeka', 'Fotoğrafçılık', 'Kitap', 'Tiyatro'],
+        bio: 'Coffee lover, amateur photographer and an aspiring AI engineer. ☕📸',
+        interests: ['AI', 'Photography', 'Books', 'Theater'],
         courses: ['BLG212', 'BLG233', 'MAT271'],
         isVerified: true,
       },
@@ -58,11 +58,11 @@ const seedData = async () => {
         username: 'burak_kaya',
         email: 'burak@itu.edu.tr',
         password: 'password123',
-        university: 'İTÜ',
-        department: 'Elektrik-Elektronik Mühendisliği',
+        university: 'ITU',
+        department: 'Electrical-Electronics Engineering',
         year: 4,
-        bio: 'Gömülü sistemler, robotik ve analog devre tasarımı ile uğraşıyorum. İkinci el eşyalar için pazar yerime bakın! 🤖🔌',
-        interests: ['Robotik', 'Spor', 'Müzik', 'Yüzme'],
+        bio: 'I am working on embedded systems, robotics and analog circuit design. Check out my marketplace for second-hand items! 🤖🔌',
+        interests: ['Robotics', 'Sports', 'Music', 'Swimming'],
         courses: ['ELK411', 'ELK482', 'BLG312'],
         isVerified: true,
       },
@@ -71,11 +71,11 @@ const seedData = async () => {
         username: 'zeynep_demir',
         email: 'zeynep@itu.edu.tr',
         password: 'password123',
-        university: 'İTÜ',
-        department: 'Endüstri Mühendisliği',
+        university: 'ITU',
+        department: 'Industrial Engineering',
         year: 1,
-        bio: 'İTÜ Endüstri Mühendisliği 1. sınıf öğrencisiyim. Kulüplerle tanışmak ve yeni arkadaşlar edinmek istiyorum. ✨',
-        interests: ['Tiyatro', 'Girişimcilik', 'Kitap', 'Tenis'],
+        bio: 'I am a 1st year Industrial Engineering student at ITU. I want to discover clubs and make new friends. ✨',
+        interests: ['Theater', 'Entrepreneurship', 'Books', 'Tennis'],
         courses: ['END101', 'MAT101'],
         isVerified: true,
       }
@@ -111,19 +111,19 @@ const seedData = async () => {
     const posts = [
       {
         author: kenan._id,
-        content: 'Meetory projesinin backend ve frontend kodlamasını tamamladım! 🚀 Tailwind v4, Socket.io ve MongoDB ile gerçekten çok akıcı ve modern oldu. Düşüncelerinizi bekliyorum!',
-        tags: ['meetory', 'webdev', 'itükampüs'],
-        university: 'İTÜ',
+        content: 'I have completed the backend and frontend coding of the Meetory project! 🚀 It became really smooth and modern with Tailwind v4, Socket.io, and MongoDB. Looking forward to your feedback!',
+        tags: ['meetory', 'webdev', 'itucampus'],
+        university: 'ITU',
         likes: [elif._id, burak._id],
         comments: [
           {
             author: elif._id,
-            content: 'Harika görünüyor Kenan! Eline sağlık, kampüs için çok faydalı olacak. 👏',
+            content: 'Looks great Kenan! Good job, it will be very useful for the campus. 👏',
             likes: [kenan._id]
           },
           {
             author: burak._id,
-            content: 'Arayüz tasarımı çok başarılı, özellikle karanlık mod (dark mode) renk paletine bayıldım.',
+            content: 'The interface design is very successful, I especially loved the dark mode color palette.',
             likes: []
           }
         ],
@@ -131,14 +131,14 @@ const seedData = async () => {
       },
       {
         author: elif._id,
-        content: 'Yarınki BLG212 (Mikroişlemci Sistemleri) vizesine çalışan var mı? Kütüphane 3. katta grup çalışması yapıyoruz, katılmak isteyen gelebilir. 📚✍️',
-        tags: ['BLG212', 'vize', 'kütüphane'],
-        university: 'İTÜ',
+        content: 'Is anyone studying for tomorrow\'s BLG212 (Microprocessor Systems) midterm? We are doing a group study on the 3rd floor of the library, anyone who wants to join can come. 📚✍️',
+        tags: ['BLG212', 'midterm', 'library'],
+        university: 'ITU',
         likes: [kenan._id],
         comments: [
           {
             author: kenan._id,
-            content: 'Ben de birazdan kütüphaneye geçeceğim, hangi masadasınız?',
+            content: 'I will also go to the library in a bit, which table are you at?',
             likes: [elif._id]
           }
         ],
@@ -146,9 +146,9 @@ const seedData = async () => {
       },
       {
         author: burak._id,
-        content: 'Pazar yerinde paylaştığım Introduction to Algorithms (CLRS) kitabına bakabilirsiniz. Tertemiz ve çiziksiz durumda, ilgilenenler DM atabilir.',
-        tags: ['clrs', 'algoritma', 'ikinciel'],
-        university: 'İTÜ',
+        content: 'You can check out the Introduction to Algorithms (CLRS) book I shared in the marketplace. It is in very clean condition, clean of markings. DM if interested.',
+        tags: ['clrs', 'algorithm', 'secondhand'],
+        university: 'ITU',
         likes: [],
         comments: [],
         visibility: 'public'
@@ -162,14 +162,14 @@ const seedData = async () => {
     const events = [
       {
         creator: kenan._id,
-        title: 'Algoritma ve Veri Yapıları Çalışma Grubu',
-        description: 'Vize ve final sınavlarına hazırlık için haftalık olarak LeetCode soru çözümleri ve algoritma pratikleri yapacağız. Bilgisayar Mühendisliği öğrencileri başta olmak üzere kodlamayla ilgilenen herkese açıktır.',
+        title: 'Algorithm and Data Structures Study Group',
+        description: 'We will do weekly LeetCode problem solving and algorithm practices to prepare for midterm and final exams. Open to anyone interested in coding, especially Computer Engineering students.',
         category: 'study',
         startDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // in 2 days
         endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000 + 3 * 60 * 60 * 1000),
-        locationName: 'İTÜ Ayazağa Kampüsü, Kütüphane Grup Çalışma Odası B',
-        campus: 'Ayazağa',
-        university: 'İTÜ',
+        locationName: 'ITU Ayazaga Campus, Library Group Study Room B',
+        campus: 'Ayazaga',
+        university: 'ITU',
         attendees: [kenan._id, elif._id, burak._id],
         maxAttendees: 15,
         isOnline: false,
@@ -177,18 +177,18 @@ const seedData = async () => {
       },
       {
         creator: zeynep._id,
-        title: 'İTÜ Girişimcilik Zirvesi 2026',
-        description: 'Türkiye\'nin önde gelen girişimcilerini ve teknoloji liderlerini ağırlayacağımız bu büyük etkinlikte sen de yerini al! Networking fırsatları, paneller ve çeşitli ikramlar olacaktır.',
+        title: 'ITU Entrepreneurship Summit 2026',
+        description: 'Take your place in this big event where we will host Turkey\'s leading entrepreneurs and technology leaders! There will be networking opportunities, panels, and various treats.',
         category: 'seminar',
         startDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // in 5 days
         endDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000 + 6 * 60 * 60 * 1000),
-        locationName: 'İTÜ SDKM Salon A',
-        campus: 'Ayazağa',
-        university: 'İTÜ',
+        locationName: 'ITU SDKM Hall A',
+        campus: 'Ayazaga',
+        university: 'ITU',
         attendees: [zeynep._id, kenan._id, elif._id],
         maxAttendees: 200,
         isOnline: false,
-        tags: ['girişimcilik', 'itüsdkm', 'networking']
+        tags: ['entrepreneurship', 'itusdkm', 'networking']
       }
     ];
 
@@ -200,38 +200,38 @@ const seedData = async () => {
       {
         seller: burak._id,
         title: 'Introduction to Algorithms (CLRS) 3rd Edition',
-        description: 'Bilgisayar bilimlerinin kutsal kitabı. Çok temiz durumda, hiçbir satırının altı çizilmedi. Dönem başında aldım ancak artık ihtiyacım kalmadı.',
+        description: 'The holy book of computer science. Very clean condition, no lines underlined. Bought at the beginning of the semester but no longer need it.',
         category: 'book',
         price: 350,
         isFree: false,
         condition: 'like_new',
-        university: 'İTÜ',
-        campus: 'Ayazağa',
+        university: 'ITU',
+        campus: 'Ayazaga',
         tags: ['clrs', 'algorithms', 'cs-books']
       },
       {
         seller: elif._id,
-        title: 'Fizik 1 (Physics for Scientists and Engineers) Ders Notları',
-        description: 'Vizeler ve finaller için çıkmış soru çözümleri ve konu özetlerinin yer aldığı, tamamı el yazısı ve renkli taratılmış PDF notlar. Ücretsiz paylaşıyorum.',
+        title: 'Physics 1 (Physics for Scientists and Engineers) Lecture Notes',
+        description: 'Handwritten and color-scanned PDF notes containing solved past exam questions and topic summaries for midterms and finals. Sharing for free.',
         category: 'notes',
         price: 0,
         isFree: true,
         condition: 'new',
-        university: 'İTÜ',
-        campus: 'Ayazağa',
-        tags: ['fizik1', 'dersnotları', 'fizik']
+        university: 'ITU',
+        campus: 'Ayazaga',
+        tags: ['physics1', 'notes', 'physics']
       },
       {
         seller: burak._id,
-        title: 'Raspberry Pi 4 (4GB RAM) + Lisanslı Kutu ve Adaptör',
-        description: 'Robotik projelerim için almıştım. Çok az kullandım, sıfır ayarında. Yanında 32GB MicroSD kart ve lisanslı adaptörüyle birlikte verilecektir.',
+        title: 'Raspberry Pi 4 (4GB RAM) + Official Case and Adapter',
+        description: 'Bought it for my robotics projects. Used very little, like new. Will be given with a 32GB MicroSD card and official adapter.',
         category: 'electronics',
         price: 1800,
         isFree: false,
         condition: 'good',
-        university: 'İTÜ',
-        campus: 'Ayazağa',
-        tags: ['raspberrypi', 'iot', 'robotik']
+        university: 'ITU',
+        campus: 'Ayazaga',
+        tags: ['raspberrypi', 'iot', 'robotics']
       }
     ];
 
@@ -251,21 +251,21 @@ const seedData = async () => {
         conversation: conversation._id,
         sender: kenan._id,
         receiver: elif._id,
-        content: 'Selam Elif, BLG212 vize çalışma grubu nerede? Kütüphaneye geldim.',
+        content: 'Hey Elif, where is the BLG212 midterm study group? I arrived at the library.',
         createdAt: new Date(Date.now() - 10 * 60 * 1000) // 10 mins ago
       },
       {
         conversation: conversation._id,
         sender: elif._id,
         receiver: kenan._id,
-        content: 'Selam Kenan! Kütüphanenin 3. katında, asansörün hemen yanındaki 12 numaralı masadayız. Bekliyoruz.',
+        content: 'Hey Kenan! We are on the 3rd floor of the library, at table 12 right next to the elevator. Waiting for you.',
         createdAt: new Date(Date.now() - 8 * 60 * 1000) // 8 mins ago
       },
       {
         conversation: conversation._id,
         sender: kenan._id,
         receiver: elif._id,
-        content: 'Süper, 2 dakikaya oradayım. Görüşürüz!',
+        content: 'Super, I will be there in 2 minutes. See you!',
         createdAt: new Date(Date.now() - 7 * 60 * 1000) // 7 mins ago
       }
     ];
@@ -284,7 +284,7 @@ const seedData = async () => {
         recipient: kenan._id,
         actor: elif._id,
         type: 'follow',
-        message: 'Elif Yılmaz seni takip etmeye başladı.',
+        message: 'Elif Yılmaz started following you.',
         isRead: false,
       },
       {
@@ -293,7 +293,7 @@ const seedData = async () => {
         type: 'comment',
         referenceModel: 'Post',
         referenceId: createdPosts[0]._id,
-        message: 'Elif Yılmaz gönderine yorum yaptı: "Harika görünüyor Kenan!..."',
+        message: 'Elif Yılmaz commented on your post: "Looks great Kenan!..."',
         isRead: false,
       },
       {
@@ -302,7 +302,7 @@ const seedData = async () => {
         type: 'like',
         referenceModel: 'Post',
         referenceId: createdPosts[0]._id,
-        message: 'Burak Kaya gönderini beğendi.',
+        message: 'Burak Kaya liked your post.',
         isRead: true,
       }
     ];

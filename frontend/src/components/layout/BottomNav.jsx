@@ -8,11 +8,11 @@ import {
 } from "lucide-react";
 
 const tabs = [
-  { to: "/feed", icon: Home, label: "Akış" },
-  { to: "/discover", icon: Compass, label: "Keşfet" },
-  { to: "/chat", icon: MessageCircle, label: "Mesaj" },
-  { to: "/events", icon: CalendarDays, label: "Etkinlik" },
-  { to: "/market", icon: ShoppingBag, label: "Pazar" },
+  { to: "/feed", icon: Home, label: "Feed" },
+  { to: "/discover", icon: Compass, label: "Discover" },
+  { to: "/chat", icon: MessageCircle, label: "Messages" },
+  { to: "/events", icon: CalendarDays, label: "Events" },
+  { to: "/market", icon: ShoppingBag, label: "Market" },
 ];
 
 /**

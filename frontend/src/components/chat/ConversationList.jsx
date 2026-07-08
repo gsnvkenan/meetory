@@ -1,5 +1,5 @@
 import { formatDistanceToNow } from "date-fns";
-import { tr } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { MessageSquare } from "lucide-react";
 import Avatar from "../common/Avatar.jsx";
 import { useSocket } from "../../context/SocketContext.jsx";
@@ -16,10 +16,10 @@ const ConversationList = ({ conversations, activeId, onSelect }) => {
           <MessageSquare size={22} />
         </div>
         <p className="text-sm font-semibold text-[var(--color-text-muted)]">
-          Henüz mesajlaşma yok
+          No messages yet
         </p>
         <p className="text-xs text-[var(--color-text-faint)]">
-          Keşfet sekmesinden biri ile başla
+          Start a chat from the Discover tab
         </p>
       </div>
     );
@@ -36,7 +36,7 @@ const ConversationList = ({ conversations, activeId, onSelect }) => {
         const timeAgo = lastMsg?.createdAt
           ? formatDistanceToNow(new Date(lastMsg.createdAt), {
               addSuffix: true,
-              locale: tr,
+              locale: enUS,
             })
           : "";
 
@@ -87,9 +87,9 @@ const ConversationList = ({ conversations, activeId, onSelect }) => {
                 }`}
               >
                 {lastMsg
-                  ? (lastMsg.sender === user?._id ? "Sen: " : "") +
+                  ? (lastMsg.sender === user?._id ? "You: " : "") +
                     lastMsg.content
-                  : "Sohbet başlat"}
+                  : "Start chat"}
               </p>
             </div>
 

@@ -16,7 +16,7 @@ const ImageLightbox = () => {
       <button
         onClick={closeLightbox}
         className="absolute top-5 right-5 p-2.5 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
-        aria-label="Kapat"
+        aria-label="Close"
       >
         <X size={22} />
       </button>
@@ -28,7 +28,7 @@ const ImageLightbox = () => {
       >
         <img
           src={src}
-          alt="Büyütülmüş önizleme"
+          alt="Enlarged preview"
           className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl scale-in"
         />
       </div>

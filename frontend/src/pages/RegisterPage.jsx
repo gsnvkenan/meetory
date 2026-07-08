@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 import {
   User,
   Mail,
@@ -22,17 +23,16 @@ import { useAuth } from "../context/AuthContext.jsx";
 import toast from "react-hot-toast";
 
 const FEATURES = [
-  { icon: Rss, text: "Akışta kampüsün gündemini yakala" },
-  { icon: MessageCircle, text: "Arkadaşlarınla anında mesajlaş" },
-  { icon: CalendarDays, text: "Etkinlikleri keşfet, yerini ayırt" },
-  { icon: ShoppingBag, text: "Pazar yerinde alışveriş yap" },
-  { icon: Compass, text: "Yeni insanlarla keşfet sayfasında tanış" },
+  { icon: Rss, text: "Catch the campus agenda in the feed" },
+  { icon: MessageCircle, text: "Chat with your friends instantly" },
+  { icon: CalendarDays, text: "Discover events, book your spot" },
+  { icon: ShoppingBag, text: "Shop in the marketplace" },
+  { icon: Compass, text: "Meet new people on the discover page" },
 ];
 
 const STATS = [
-  { value: "12K+", label: "Aktif öğrenci" },
-  { value: "80+", label: "Üniversite" },
-  { value: "500+", label: "Etkinlik" },
+  { value: "1K+", label: "Active students" },
+
 ];
 
 const RegisterPage = () => {
@@ -53,25 +53,25 @@ const RegisterPage = () => {
 
   const validate = () => {
     const e = {};
-    if (!form.name.trim()) e.name = "Ad Soyad gerekli";
-    if (!form.username.trim()) e.username = "Kullanıcı adı gerekli";
+    if (!form.name.trim()) e.name = "Full name is required";
+    if (!form.username.trim()) e.username = "Username is required";
 
     // Email check for .edu / .edu.tr
     if (!form.email) {
-      e.email = "E-posta adresi gerekli";
+      e.email = "Email address is required";
     } else {
-      const emailRegex = /^[^\s@]+@[^\s@]+\.(edu|edu\.tr)$/i;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.(edu|edu\.ge)$/i;
       if (!emailRegex.test(form.email)) {
         e.email =
-          "Sadece üniversite e-postaları (.edu veya .edu.tr) geçerlidir";
+          "Only university emails (.edu or .edu.tr) are valid";
       }
     }
 
     if (!form.password || form.password.length < 6) {
-      e.password = "Şifre en az 6 karakter olmalıdır";
+      e.password = "Password must be at least 6 characters";
     }
-    if (!form.university.trim()) e.university = "Üniversite adı gerekli";
-    if (!form.department.trim()) e.department = "Bölüm bilgisi gerekli";
+    if (!form.university.trim()) e.university = "University name is required";
+    if (!form.department.trim()) e.department = "Department info is required";
 
     return e;
   };
@@ -95,12 +95,12 @@ const RegisterPage = () => {
         department: form.department.trim(),
         year: Number(form.year),
       });
-      toast.success("Kayıt başarılı! Aramıza hoş geldin 🎓");
+      toast.success("Registration successful! Welcome to the community 🎓");
       navigate("/feed");
     } catch (err) {
       toast.error(
         err?.response?.data?.message ||
-          "Kayıt başarısız. Lütfen bilgileri kontrol et.",
+        "Registration failed. Please check your information.",
       );
     } finally {
       setLoading(false);
@@ -117,28 +117,25 @@ const RegisterPage = () => {
 
       <div className="relative w-full max-w-6xl my-8 grid lg:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl border border-[var(--color-border)] bg-[var(--color-surface)]">
         {/* LEFT — brand / marketing panel */}
-        <div className="hidden lg:flex flex-col justify-between relative p-10 bg-gradient-to-br from-[#1c46ad] via-[#2258d6] to-[#7458f0] text-white overflow-hidden">
+        <div className="hidden lg:flex flex-col justify-between relative p-10 bg-blue-500 text-white overflow-hidden">
           <div className="absolute -top-24 -right-16 w-72 h-72 bg-white/10 rounded-full blur-3xl" />
           <div className="absolute bottom-0 -left-16 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
 
           <div className="relative">
             <div className="flex items-center gap-3 mb-14">
-              <div className="brand-badge w-11 h-11 rounded-2xl flex items-center justify-center shrink-0">
-                <Sparkles size={22} className="text-white" />
-              </div>
+              <img src={logo} alt="Meetory Logo" className="w-11 h-11 object-contain shrink-0" />
               <span className="text-2xl font-extrabold font-[Outfit] tracking-tight">
-                Meetory
+
               </span>
             </div>
 
             <h2 className="page-heading text-3xl leading-tight mb-4">
-              Kampüsün en sosyal
+              The most social
               <br />
-              köşesi seni bekliyor.
+              corner of the campus awaits you.
             </h2>
             <p className="text-white/70 text-sm leading-relaxed max-w-sm mb-10">
-              Ücretsiz bir hesap oluştur, üniversiteni bul ve kampüs topluluğuna
-              katıl.
+              Create a free account, find your university and join the campus community.
             </p>
 
             <ul className="space-y-4">
@@ -169,31 +166,28 @@ const RegisterPage = () => {
 
         {/* RIGHT — form panel */}
         <div className="flex flex-col justify-center p-8 sm:p-12">
-          {/* Mobile-only logo */}
           <div className="flex lg:hidden flex-col items-center mb-8">
-            <div className="brand-badge w-14 h-14 rounded-2xl flex items-center justify-center mb-4">
-              <Sparkles size={26} className="text-white" />
-            </div>
-            <h1 className="text-2xl font-extrabold gradient-text font-[Outfit]">
+            <img src={logo} alt="Meetory Logo" className="w-14 h-14 object-contain mb-4 shrink-0" />
+            <h1 className="text-2xl font-extrabold font-[Outfit] text-blue-500">
               Meetory
             </h1>
             <p className="text-[var(--color-text-faint)] text-sm mt-1 text-center">
-              Kampüsün en sosyal köşesi seni bekliyor
+              The most social corner of the campus awaits you
             </p>
           </div>
 
           <div className="mb-8">
-            <h2 className="page-heading text-2xl">Hesap Oluştur</h2>
+            <h2 className="page-heading text-2xl">Create Account</h2>
             <p className="text-[var(--color-text-faint)] text-sm mt-1">
-              Başlamak için bilgilerini eksiksiz doldur
+              Fill in your information completely to get started
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
-                label="Ad Soyad"
-                placeholder="Ahmet Yılmaz"
+                label="Full Name"
+                placeholder="John Doe"
                 icon={User}
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -201,8 +195,8 @@ const RegisterPage = () => {
               />
 
               <Input
-                label="Kullanıcı Adı"
-                placeholder="ahmetyilmaz"
+                label="Username"
+                placeholder="johndoe"
                 icon={User}
                 value={form.username}
                 onChange={(e) => setForm({ ...form, username: e.target.value })}
@@ -211,9 +205,9 @@ const RegisterPage = () => {
             </div>
 
             <Input
-              label="Üniversite E-postası"
+              label="University Email"
               type="email"
-              placeholder="ogrenci@universite.edu.tr"
+              placeholder="student@university.edu"
               icon={Mail}
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
@@ -222,7 +216,7 @@ const RegisterPage = () => {
 
             <div className="relative">
               <Input
-                label="Şifre"
+                label="Password"
                 type={showPass ? "text" : "password"}
                 placeholder="••••••••"
                 icon={Lock}
@@ -241,8 +235,8 @@ const RegisterPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <Input
-                label="Üniversite"
-                placeholder="İTÜ, ODTÜ..."
+                label="University"
+                placeholder="TSU, GTU..."
                 icon={GraduationCap}
                 value={form.university}
                 onChange={(e) =>
@@ -252,8 +246,8 @@ const RegisterPage = () => {
               />
 
               <Input
-                label="Bölüm"
-                placeholder="Bilgisayar Müh."
+                label="Department"
+                placeholder="Computer Engineering"
                 icon={BookOpen}
                 value={form.department}
                 onChange={(e) =>
@@ -265,7 +259,7 @@ const RegisterPage = () => {
 
             <div>
               <label className="block text-sm font-semibold text-[var(--color-text-muted)] mb-1.5">
-                Sınıf
+                Class / Year
               </label>
               <div className="relative flex items-center">
                 <Calendar
@@ -277,28 +271,28 @@ const RegisterPage = () => {
                   onChange={(e) => setForm({ ...form, year: e.target.value })}
                   className="input-base pl-10 appearance-none"
                 >
-                  <option value="1">1. Sınıf (Hazırlık / Lisans 1)</option>
-                  <option value="2">2. Sınıf</option>
-                  <option value="3">3. Sınıf</option>
-                  <option value="4">4. Sınıf</option>
-                  <option value="5">
-                    Lisansüstü (Yüksek Lisans / Doktora)
+                  <option value="1">1st Year</option>
+                  <option value="2">2nd Year</option>
+                  <option value="3">3rd Year</option>
+                  <option value="4">4th Year</option>
+                  <option value="6">
+                    Master
                   </option>
                 </select>
               </div>
             </div>
 
             <Button type="submit" loading={loading} className="w-full mt-2">
-              Kayıt Ol
+              Register
             </Button>
 
             <p className="text-center text-sm text-[var(--color-text-faint)]">
-              Zaten hesabın var mı?{" "}
+              Already have an account?{" "}
               <Link
                 to="/login"
                 className="text-indigo-400 hover:text-indigo-300 font-semibold"
               >
-                Giriş Yap
+                Login
               </Link>
             </p>
           </form>

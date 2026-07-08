@@ -34,7 +34,7 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
     const files = Array.from(e.target.files);
     // Limit to max 3 images
     if (files.length + imageFiles.length > 3) {
-      toast.error("En fazla 3 adet fotoğraf ekleyebilirsin.");
+      toast.error("You can add a maximum of 3 photos.");
       return;
     }
     setImageFiles((prev) => [...prev, ...files]);
@@ -47,12 +47,12 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim()) {
-      toast.error("İlan başlığı gereklidir");
+      toast.error("Listing title is required");
       return;
     }
     if (!form.isFree && (!form.price || Number(form.price) <= 0)) {
       toast.error(
-        "Lütfen geçerli bir fiyat belirtin veya ilanı ücretsiz yapın.",
+        "Please specify a valid price or make the listing free.",
       );
       return;
     }
@@ -74,7 +74,7 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
       });
 
       const { data } = await marketApi.createListing(fd);
-      toast.success("İlan başarıyla yayınlandı! 🛍️");
+      toast.success("Listing successfully published! 🛍️");
       if (onCreated) onCreated(data.listing);
 
       // Reset form
@@ -92,7 +92,7 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
     } catch (err) {
       console.error(err);
       toast.error(
-        err?.response?.data?.message || "İlan oluşturulurken hata oluştu.",
+        err?.response?.data?.message || "An error occurred while creating listing.",
       );
     } finally {
       setLoading(false);
@@ -100,14 +100,14 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Yeni İlan Ver" size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title="Post New Listing" size="lg">
       <form onSubmit={handleSubmit} className="space-y-5">
         {/* Images preview / Upload */}
         <div>
           <label className="block text-sm font-semibold text-[var(--color-text-muted)] mb-2">
-            İlan Fotoğrafları{" "}
+            Listing Photos{" "}
             <span className="text-[var(--color-text-faint)] font-normal">
-              (En fazla 3 adet)
+              (Maximum of 3)
             </span>
           </label>
           <div className="flex flex-wrap items-center gap-3">
@@ -133,7 +133,7 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
             {imageFiles.length < 3 && (
               <label className="w-20 h-20 rounded-xl border border-dashed border-[var(--color-border)] bg-[var(--color-surface-2)] hover:bg-[var(--color-surface-3)] cursor-pointer flex flex-col items-center justify-center text-[var(--color-text-faint)] hover:text-[var(--color-primary)] transition-colors">
                 <Camera size={18} />
-                <span className="text-[10px] font-semibold mt-1">Ekle</span>
+                <span className="text-[10px] font-semibold mt-1">Add</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -147,55 +147,55 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
         </div>
 
         <Input
-          label="İlan Başlığı"
+          label="Listing Title"
           required
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
-          placeholder="Örn: Temiz İkinci El Grafik Tablet"
+          placeholder="e.g. Clean Second Hand Graphic Tablet"
         />
 
         <div className="grid grid-cols-2 gap-4">
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-semibold text-[var(--color-text-muted)]">
-              Kategori
+              Category
             </label>
             <select
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
               className="input-base cursor-pointer"
             >
-              <option value="notes">Ders Notu</option>
-              <option value="book">Kitap</option>
-              <option value="electronics">Elektronik</option>
-              <option value="clothing">Giyim / Aksesuar</option>
-              <option value="furniture">Eşya / Mobilya</option>
-              <option value="other">Diğer</option>
+              <option value="notes">Lecture Notes</option>
+              <option value="book">Book</option>
+              <option value="electronics">Electronics</option>
+              <option value="clothing">Clothing / Accessory</option>
+              <option value="furniture">Furniture / Item</option>
+              <option value="other">Other</option>
             </select>
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-semibold text-[var(--color-text-muted)]">
-              Kullanım Durumu
+              Condition
             </label>
             <select
               value={form.condition}
               onChange={(e) => setForm({ ...form, condition: e.target.value })}
               className="input-base cursor-pointer"
             >
-              <option value="new">Sıfır / Kutusunda</option>
-              <option value="like_new">Yeni Gibi / Çok Az Kullanılmış</option>
-              <option value="good">İyi / Sorunsuz</option>
-              <option value="fair">Orta / Eskimiş</option>
-              <option value="poor">Yıpranmış</option>
+              <option value="new">New / In Box</option>
+              <option value="like_new">Like New / Very Lightly Used</option>
+              <option value="good">Good / Working</option>
+              <option value="fair">Fair / Used</option>
+              <option value="poor">Poor / Worn</option>
             </select>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-4 items-start">
           <Input
-            label="Fiyat (TL)"
+            label="Price (GEL)"
             type="number"
-            placeholder={form.isFree ? "Ücretsiz" : "0.00"}
+            placeholder={form.isFree ? "Free" : "0.00"}
             value={form.price}
             onChange={(e) => setForm({ ...form, price: e.target.value })}
             disabled={form.isFree}
@@ -209,23 +209,23 @@ const CreateListingModal = ({ isOpen, onClose, onCreated }) => {
               onChange={(e) => setForm({ ...form, isFree: e.target.checked })}
               className="accent-[var(--color-primary)] w-4 h-4 rounded"
             />
-            Bu ürünü ücretsiz veriyorum
+            I am giving this item away for free
           </label>
         </div>
 
         <Input
-          label="Kampüs (Teslim Yeri)"
-          placeholder="Ayazağa, Beşiktaş vb."
+          label="Campus (Delivery Location)"
+          placeholder="Campus location..."
           value={form.campus}
           onChange={(e) => setForm({ ...form, campus: e.target.value })}
         />
 
-        <div className="flex justify-end gap-2 pt-4 border-t border-[var(--color-border)]">
+        <div className="flex justify-end gap-2 pt-2 border-t border-[var(--color-border)]">
           <Button variant="secondary" size="sm" type="button" onClick={onClose}>
-            Vazgeç
+            Cancel
           </Button>
           <Button variant="primary" size="sm" type="submit" loading={loading}>
-            İlanı Yayınla
+            Publish Listing
           </Button>
         </div>
       </form>

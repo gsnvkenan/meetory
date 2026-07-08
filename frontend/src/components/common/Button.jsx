@@ -2,7 +2,7 @@ import { Loader2 } from "lucide-react";
 
 const variants = {
   primary:
-    "bg-gradient-to-br from-[#2258d6] to-[#4c6ef0] hover:from-[#1c46ad] hover:to-[#2258d6] text-white btn-glow disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none",
+    "bg-blue-500 hover:bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:shadow-none",
   secondary:
     "bg-[var(--color-surface-2)] hover:bg-[var(--color-surface-3)] text-[var(--color-text)] border border-[var(--color-border)]",
   ghost:

@@ -34,7 +34,7 @@ const SavedPage = () => {
       }
       setHasMore(pageNum < data.pagination.pages);
     } catch (err) {
-      toast.error("Kaydedilen gönderiler yüklenirken hata oluştu.");
+      toast.error("Error loading saved posts.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -71,14 +71,14 @@ const SavedPage = () => {
       {/* Header */}
       <div>
         <h1 className="page-heading text-2xl md:text-3xl flex items-center gap-2.5">
-          Kaydedilenler
+          Saved
           <span className="chip chip-amber">
             <Bookmark size={12} />
             {posts.length}
           </span>
         </h1>
         <p className="text-sm text-[var(--color-text-faint)] mt-1.5">
-          Daha sonra bakmak üzere kaydettiğin gönderiler
+          Posts you've saved to look at later
         </p>
       </div>
 
@@ -93,11 +93,11 @@ const SavedPage = () => {
             <Bookmark size={22} />
           </div>
           <h3 className="text-base font-semibold">
-            Henüz kaydedilen gönderi yok
+            No saved posts yet
           </h3>
           <p className="text-sm text-[var(--color-text-faint)] max-w-sm">
-            Gönderilerin sağ altındaki yer işareti simgesine tıklayarak
-            gönderileri daha sonra okumak üzere buraya kaydedebilirsin.
+            You can save posts here to read them later by clicking the bookmark
+            icon on the bottom right of the posts.
           </p>
         </div>
       ) : (

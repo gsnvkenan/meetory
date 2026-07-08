@@ -158,26 +158,15 @@
 
     /* ── Gradient text ─────────────────────────────── */
     .gradient-text {
-        background: linear-gradient(
-            135deg,
-            #1c46ad 0%,
-            #2258d6 45%,
-            #7458f0 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #3b82f6;
+        -webkit-text-fill-color: initial;
+        background: none;
     }
 
     /* ── Brand mark badge (logo) ──────────────────── */
     .brand-badge {
-        background: linear-gradient(
-            135deg,
-            #2258d6 0%,
-            #4c6ef0 55%,
-            #7458f0 100%
-        );
-        box-shadow: 0 8px 20px -4px rgba(34, 88, 214, 0.45);
+        background: #3b82f6;
+        box-shadow: 0 8px 20px -4px rgba(34, 88, 214, 0.25);
     }
 
     /* ── Glow button ───────────────────────────────── */
@@ -372,7 +361,7 @@
 
     /* ── Story ring gradient ───────────────────────── */
     .story-ring {
-        background: linear-gradient(135deg, #2258d6, #4c6ef0, #7458f0);
+        background: #3b82f6;
         padding: 2px;
         border-radius: 50%;
     }

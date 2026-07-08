@@ -1,5 +1,6 @@
 import { Link, NavLink } from "react-router-dom";
-import { Sparkles, Bookmark, Bell } from "lucide-react";
+import logo from "../../assets/logo.png";
+import { Bookmark, Bell } from "lucide-react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useSocket } from "../../context/SocketContext.jsx";
 import Avatar from "../common/Avatar.jsx";
@@ -19,9 +20,7 @@ const MobileHeader = () => {
           to="/feed"
           className="flex items-center gap-2 group active:scale-95 transition-transform"
         >
-          <div className="w-8 h-8 rounded-xl brand-badge flex items-center justify-center">
-            <Sparkles size={16} className="text-white" />
-          </div>
+          <img src={logo} alt="Meetory Logo" className="w-8 h-8 object-contain shrink-0" />
           <span className="text-lg font-extrabold gradient-text font-[Outfit] tracking-tight">
             Meetory
           </span>
@@ -39,7 +38,7 @@ const MobileHeader = () => {
                   : "text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface-2)]"
               }`
             }
-            title="Kaydedilenler"
+            title="Saved"
           >
             <Bookmark size={20} />
           </NavLink>
@@ -54,7 +53,7 @@ const MobileHeader = () => {
                   : "text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-surface-2)]"
               }`
             }
-            title="Bildirimler"
+            title="Notifications"
           >
             <div className="relative flex items-center justify-center">
               <Bell size={20} />
@@ -69,7 +68,7 @@ const MobileHeader = () => {
             <Link
               to={`/profile/${user.username}`}
               className="flex items-center p-0.5 rounded-full hover:ring-2 hover:ring-[var(--color-primary)]/20 transition-all ml-1"
-              title="Profilim"
+              title="My Profile"
             >
               <Avatar src={user.avatar} name={user.name} size="xs" />
             </Link>

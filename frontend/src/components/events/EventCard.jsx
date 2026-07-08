@@ -8,23 +8,23 @@ import {
   Sparkles,
 } from "lucide-react";
 import { format } from "date-fns";
-import { tr } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import Avatar from "../common/Avatar.jsx";
 import Button from "../common/Button.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLightboxStore } from "../../context/useLightboxStore.js";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { eventApi } from "../../api/index.js";
 import toast from "react-hot-toast";
 
 const categoryLabels = {
-  club: { text: "Kulüp", chip: "chip-blue" },
-  party: { text: "Parti/Eğlence", chip: "chip-rose" },
-  study: { text: "Ders/Çalışma", chip: "chip-emerald" },
-  sport: { text: "Spor", chip: "chip-amber" },
-  seminar: { text: "Seminer/Panel", chip: "chip-violet" },
+  club: { text: "Club", chip: "chip-blue" },
+  party: { text: "Party/Fun", chip: "chip-rose" },
+  study: { text: "Study", chip: "chip-emerald" },
+  sport: { text: "Sport", chip: "chip-amber" },
+  seminar: { text: "Seminar/Panel", chip: "chip-violet" },
   hackathon: { text: "Hackathon", chip: "chip-blue" },
-  other: { text: "Diğer", chip: "chip-slate" },
+  other: { text: "Other", chip: "chip-slate" },
 };
 
 const EventCard = ({ event, onDelete }) => {
@@ -32,6 +32,11 @@ const EventCard = ({ event, onDelete }) => {
   const { openLightbox } = useLightboxStore();
   const [attendees, setAttendees] = useState(event.attendees || []);
   const [loading, setLoading] = useState(false);
+
+  // Keep local attendee list in sync when the event prop updates (e.g. via socket)
+  useEffect(() => {
+    setAttendees(event.attendees || []);
+  }, [event.attendees]);
 
   const isCreator =
     event.creator?._id === user?._id || event.creator === user?._id;
@@ -43,32 +48,32 @@ const EventCard = ({ event, onDelete }) => {
       const { data } = await eventApi.toggleAttend(event._id);
       if (data.attending) {
         setAttendees((prev) => [...prev, user]);
-        toast.success("Etkinliğe katılımın onaylandı! 🎉");
+        toast.success("Your attendance is confirmed! 🎉");
       } else {
         setAttendees((prev) => prev.filter((a) => (a._id || a) !== user?._id));
-        toast.success("Etkinlik katılımı iptal edildi.");
+        toast.success("Attendance cancelled.");
       }
     } catch {
-      toast.error("İşlem tamamlanamadı.");
+      toast.error("Failed to complete action.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Bu etkinliği silmek istediğine emin misin?")) return;
+    if (!window.confirm("Are you sure you want to delete this event?")) return;
     try {
       await eventApi.deleteEvent(event._id);
-      toast.success("Etkinlik silindi");
+      toast.success("Event deleted");
       if (onDelete) onDelete(event._id);
     } catch {
-      toast.error("Silme işlemi başarısız");
+      toast.error("Failed to delete event");
     }
   };
 
   const cat = categoryLabels[event.category] || categoryLabels.other;
   const dateStr = format(new Date(event.startDate), "dd MMMM yyyy, HH:mm", {
-    locale: tr,
+    locale: enUS,
   });
 
   return (
@@ -83,7 +88,7 @@ const EventCard = ({ event, onDelete }) => {
             onClick={() => openLightbox(event.coverImage)}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[#2258d6] via-[#4c6ef0] to-[#7458f0] flex items-center justify-center gap-2 text-white/90">
+          <div className="w-full h-full bg-blue-500 flex items-center justify-center gap-2 text-white/90">
             <Sparkles size={16} />
             <span className="font-bold text-xs tracking-wider uppercase">
               Meetory Event
@@ -104,7 +109,7 @@ const EventCard = ({ event, onDelete }) => {
         {isCreator && (
           <button
             onClick={handleDelete}
-            title="Etkinliği Sil"
+            title="Delete Event"
             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/45 hover:bg-red-500/90 text-white flex items-center justify-center transition-colors backdrop-blur-sm"
           >
             <Trash2 size={14} />
@@ -119,7 +124,7 @@ const EventCard = ({ event, onDelete }) => {
             {event.title}
           </h3>
           <p className="text-sm text-[var(--color-text-faint)] line-clamp-2 mt-1.5">
-            {event.description || "Açıklama bulunmuyor."}
+            {event.description || "No description found."}
           </p>
         </div>
 
@@ -140,8 +145,8 @@ const EventCard = ({ event, onDelete }) => {
             />
             <span className="truncate">
               {event.isOnline
-                ? "Online Etkinlik"
-                : `${event.campus} Kampüsü · ${event.locationName}`}
+                ? "Online Event"
+                : `${event.campus} Campus · ${event.locationName}`}
             </span>
           </div>
 
@@ -154,7 +159,7 @@ const EventCard = ({ event, onDelete }) => {
                 rel="noreferrer"
                 className="text-emerald-600 font-medium hover:underline flex items-center gap-1"
               >
-                Katılım Linki <ExternalLink size={11} />
+                Join Link <ExternalLink size={11} />
               </a>
             </div>
           )}
@@ -181,7 +186,7 @@ const EventCard = ({ event, onDelete }) => {
                 size={13}
                 className="text-[var(--color-text-faint)] shrink-0"
               />
-              {attendees.length} Katılımcı
+              {attendees.length} Attendees
             </span>
           </div>
 
@@ -192,7 +197,7 @@ const EventCard = ({ event, onDelete }) => {
             onClick={handleAttend}
             className="shrink-0"
           >
-            {isAttending ? "Katılıyorsun" : "Katıl"}
+            {isAttending ? "Going" : "Join"}
           </Button>
         </div>
       </div>

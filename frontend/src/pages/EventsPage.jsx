@@ -11,21 +11,23 @@ import CreateEventModal from "../components/events/CreateEventModal.jsx";
 import Button from "../components/common/Button.jsx";
 import { eventApi } from "../api/index.js";
 import { useAuth } from "../context/AuthContext.jsx";
+import { useSocket } from "../context/SocketContext.jsx";
 import toast from "react-hot-toast";
 
 const categories = [
-  { value: "", label: "Tüm Kategoriler" },
-  { value: "club", label: "Kulüp" },
-  { value: "party", label: "Parti/Eğlence" },
-  { value: "study", label: "Ders/Çalışma" },
-  { value: "sport", label: "Spor" },
-  { value: "seminar", label: "Seminer/Panel" },
+  { value: "", label: "All Categories" },
+  { value: "club", label: "Club" },
+  { value: "party", label: "Party/Fun" },
+  { value: "study", label: "Study" },
+  { value: "sport", label: "Sport" },
+  { value: "seminar", label: "Seminar/Panel" },
   { value: "hackathon", label: "Hackathon" },
-  { value: "other", label: "Diğer" },
+  { value: "other", label: "Other" },
 ];
 
 const EventsPage = () => {
   const { user } = useAuth();
+  const { socket } = useSocket();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState("");
@@ -42,7 +44,7 @@ const EventsPage = () => {
       setEvents(data.events || []);
     } catch (err) {
       console.error(err);
-      toast.error("Etkinlikler yüklenirken hata oluştu.");
+      toast.error("Error loading events.");
     } finally {
       setLoading(false);
     }
@@ -51,6 +53,63 @@ const EventsPage = () => {
   useEffect(() => {
     fetchEvents();
   }, [categoryFilter, fetchEvents]);
+
+  // Keep the event list in sync with real-time socket updates
+  useEffect(() => {
+    if (!socket) return;
+
+    const matchesFilter = (event) =>
+      event.university === user?.university &&
+      (!categoryFilter || event.category === categoryFilter);
+
+    const sortByStartDate = (list) =>
+      [...list].sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+
+    const handleCreated = (event) => {
+      if (!matchesFilter(event)) return;
+      setEvents((prev) => {
+        if (prev.some((e) => e._id === event._id)) return prev;
+        return sortByStartDate([event, ...prev]);
+      });
+    };
+
+    const handleUpdated = (event) => {
+      setEvents((prev) => {
+        const exists = prev.some((e) => e._id === event._id);
+        if (!matchesFilter(event)) {
+          return prev.filter((e) => e._id !== event._id);
+        }
+        if (!exists) return sortByStartDate([event, ...prev]);
+        return sortByStartDate(
+          prev.map((e) => (e._id === event._id ? event : e)),
+        );
+      });
+    };
+
+    const handleDeleted = ({ eventId }) => {
+      setEvents((prev) => prev.filter((e) => e._id !== eventId));
+    };
+
+    const handleAttendance = ({ eventId, attendees, attendeeCount }) => {
+      setEvents((prev) =>
+        prev.map((e) =>
+          e._id === eventId ? { ...e, attendees, attendeeCount } : e,
+        ),
+      );
+    };
+
+    socket.on("event:created", handleCreated);
+    socket.on("event:updated", handleUpdated);
+    socket.on("event:deleted", handleDeleted);
+    socket.on("event:attendance", handleAttendance);
+
+    return () => {
+      socket.off("event:created", handleCreated);
+      socket.off("event:updated", handleUpdated);
+      socket.off("event:deleted", handleDeleted);
+      socket.off("event:attendance", handleAttendance);
+    };
+  }, [socket, categoryFilter, user?.university]);
 
   const handleEventCreated = (newEvent) => {
     // Add the new event at the beginning of the list if it matches the current category filter
@@ -73,11 +132,10 @@ const EventsPage = () => {
           </div>
           <div>
             <h1 className="page-heading text-2xl sm:text-3xl text-[var(--color-text)]">
-              Kampüs Etkinlikleri
+              Campus Events
             </h1>
             <p className="text-sm text-[var(--color-text-faint)] mt-1">
-              {user?.university} bünyesindeki tüm kulüp ve çalışma grupları
-              aktiviteleri
+              All club and study group activities within {user?.university}
             </p>
           </div>
         </div>
@@ -87,7 +145,7 @@ const EventsPage = () => {
           icon={Plus}
           className="shrink-0"
         >
-          Etkinlik Oluştur
+          Create Event
         </Button>
       </div>
 
@@ -103,7 +161,7 @@ const EventsPage = () => {
             onClick={() => setCategoryFilter(cat.value)}
             className={`chip px-4 py-2 text-xs transition-all ${
               categoryFilter === cat.value
-                ? "bg-gradient-to-br from-[#2258d6] to-[#4c6ef0] border-transparent text-white shadow-md"
+                ? "bg-blue-500 border-transparent text-white shadow-md"
                 : "chip-slate hover:text-[var(--color-text)] hover:border-[var(--color-primary)]/25"
             }`}
           >
@@ -122,13 +180,11 @@ const EventsPage = () => {
           <div className="w-14 h-14 rounded-2xl bg-[var(--color-primary)]/10 flex items-center justify-center text-[var(--color-primary)]">
             <CalendarDays size={24} />
           </div>
-          <h3 className="text-base font-bold page-heading">
-            Aktif Etkinlik Bulunmuyor
-          </h3>
+          <h3 className="text-base font-bold page-heading">No Active Events</h3>
           <p className="text-sm text-[var(--color-text-faint)] max-w-sm">
             {categoryFilter
-              ? "Seçilen kategoride yakında gerçekleşecek bir etkinlik bulunmuyor."
-              : "Yakın zamanda planlanmış bir etkinlik bulunmuyor. Yeni bir tane oluşturarak ilk adımı sen at!"}
+              ? "There are no upcoming events in the selected category."
+              : "There are no events planned recently. Take the first step by creating a new one!"}
           </p>
           <Button
             onClick={() => setModalOpen(true)}
@@ -136,7 +192,7 @@ const EventsPage = () => {
             size="sm"
             className="mt-1"
           >
-            İlk Etkinliği Oluştur
+            Create First Event
           </Button>
         </div>
       ) : (

@@ -19,7 +19,7 @@ const DiscoverPage = () => {
         setRecommendations(data.recommendations || []);
       } catch (err) {
         console.error(err);
-        toast.error("Öneriler yüklenirken hata oluştu.");
+        toast.error("Error loading recommendations.");
       } finally {
         setLoading(false);
       }
@@ -58,7 +58,7 @@ const DiscoverPage = () => {
       setRecommendations(mapped);
     } catch (err) {
       console.error(err);
-      toast.error("Arama sırasında hata oluştu.");
+      toast.error("An error occurred during search.");
     } finally {
       setLoading(false);
     }
@@ -70,15 +70,14 @@ const DiscoverPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="page-heading text-2xl md:text-3xl flex items-center gap-2.5">
-            Keşfet
+            Discover
             <span className="chip chip-blue">
               <Sparkles size={12} />
               Meetory
             </span>
           </h1>
           <p className="text-sm text-[var(--color-text-faint)] mt-1.5">
-            Ortak ilgi alanlarına sahip arkadaşlarını ve ders çalışma gruplarını
-            bul
+            Find friends and study groups with shared interests
           </p>
         </div>
       </div>
@@ -92,7 +91,7 @@ const DiscoverPage = () => {
           />
           <input
             type="text"
-            placeholder="İsim, kullanıcı adı veya ilgi alanına göre ara..."
+            placeholder="Search by name, username, or interests..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full text-sm rounded-full border border-[var(--color-border)] bg-[var(--color-surface)] pl-12 pr-5 py-3.5 shadow-sm outline-none transition-all focus:border-[var(--color-primary)] focus:shadow-[0_0_0_3px_rgba(34,88,214,0.12)]"
@@ -100,31 +99,31 @@ const DiscoverPage = () => {
         </div>
         <button
           type="submit"
-          className="shrink-0 inline-flex items-center gap-2 rounded-full px-6 text-sm font-semibold text-white bg-gradient-to-br from-[#2258d6] to-[#4c6ef0] hover:from-[#1c46ad] hover:to-[#2258d6] btn-glow transition-all cursor-pointer"
+          className="shrink-0 inline-flex items-center gap-2 rounded-full px-6 text-sm font-semibold text-white bg-blue-500 hover:bg-blue-600 btn-glow transition-all cursor-pointer"
         >
           <Search size={16} />
-          Ara
+          Search
         </button>
       </form>
 
       {/* Recommendation System Explanation */}
       {!searchMode && (
-        <div className="card p-5 flex gap-4 items-start bg-gradient-to-br from-[var(--color-surface)] to-[rgba(34,88,214,0.03)]">
+        <div className="card p-5 flex gap-4 items-start bg-[var(--color-surface)]">
           <div className="chip chip-blue !p-2.5 shrink-0">
             <Info size={16} />
           </div>
           <div>
             <p className="font-semibold text-sm mb-1.5 flex items-center gap-2">
-              Meetory Eşleşme Algoritması Nasıl Çalışır?
+              How Does the Meetory Matching Algorithm Work?
             </p>
             <p className="text-sm text-[var(--color-text-muted)] leading-relaxed mb-2.5">
-              Bu puanlar aşağıdaki kriterlere göre anlık olarak hesaplanır:
+              These scores are calculated instantly based on the following criteria:
             </p>
             <div className="flex flex-wrap gap-2">
-              <span className="chip chip-emerald">Ortak Dersler +15</span>
-              <span className="chip chip-violet">Ortak İlgi Alanları +10</span>
-              <span className="chip chip-blue">Aynı Bölüm +20</span>
-              <span className="chip chip-amber">Ortak Takipler</span>
+              <span className="chip chip-emerald">Shared Courses +15</span>
+              <span className="chip chip-violet">Shared Interests +10</span>
+              <span className="chip chip-blue">Same Department +20</span>
+              <span className="chip chip-amber">Mutual Follows</span>
             </div>
           </div>
         </div>
@@ -134,7 +133,7 @@ const DiscoverPage = () => {
       <div>
         <h2 className="page-heading text-lg mb-4 flex items-center gap-2">
           <Users size={18} className="text-[var(--color-primary)]" />
-          {searchMode ? "Arama Sonuçları" : "Senin İçin Önerilenler"}
+          {searchMode ? "Search Results" : "Recommended for You"}
         </h2>
 
         {loading ? (
@@ -146,11 +145,11 @@ const DiscoverPage = () => {
             <div className="w-14 h-14 rounded-full bg-[var(--color-surface-2)] flex items-center justify-center text-[var(--color-text-muted)] text-2xl">
               👥
             </div>
-            <h3 className="text-base font-semibold">Sonuç Bulunamadı</h3>
+            <h3 className="text-base font-semibold">No Results Found</h3>
             <p className="text-sm text-[var(--color-text-faint)] max-w-sm">
               {searchMode
-                ? "Arama kriterlerine uygun hiçbir kullanıcı bulamadık. Kelimeleri kontrol edip tekrar dene."
-                : "Şu an için yeni bir öneri bulamadık. Daha fazla ilgi alanı eklemeyi dene!"}
+                ? "We couldn't find any users matching your search criteria. Check your spelling and try again."
+                : "We couldn't find any recommendations for now. Try adding more interests!"}
             </p>
           </div>
         ) : (

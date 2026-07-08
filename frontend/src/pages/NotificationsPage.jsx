@@ -14,7 +14,7 @@ import {
 import Avatar from "../components/common/Avatar.jsx";
 import { userApi } from "../api/index.js";
 import { formatDistanceToNow } from "date-fns";
-import { tr } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import { useSocket } from "../context/SocketContext.jsx";
 import toast from "react-hot-toast";
 
@@ -44,7 +44,7 @@ const NotificationsPage = () => {
         setHasUnreadNotifications(false);
       } catch (err) {
         console.error(err);
-        toast.error("Bildirimler yüklenirken hata oluştu.");
+        toast.error("Error loading notifications.");
       } finally {
         setLoading(false);
       }
@@ -59,14 +59,14 @@ const NotificationsPage = () => {
       {/* Header */}
       <div>
         <h1 className="page-heading text-2xl md:text-3xl flex items-center gap-2.5">
-          Bildirimler
+          Notifications
           <span className="chip chip-blue">
             <Bell size={12} />
-            {unreadCount > 0 ? `${unreadCount} yeni` : "Meetory"}
+            {unreadCount > 0 ? `${unreadCount} new` : "Meetory"}
           </span>
         </h1>
         <p className="text-sm text-[var(--color-text-faint)] mt-1.5">
-          Etkinliklerin, gönderilerin ve profilinle ilgili tüm gelişmeler
+          All updates about your events, posts, and profile
         </p>
       </div>
 
@@ -79,10 +79,10 @@ const NotificationsPage = () => {
           <div className="w-14 h-14 rounded-full bg-[var(--color-surface-2)] flex items-center justify-center text-[var(--color-text-faint)]">
             <Bell size={22} />
           </div>
-          <h3 className="text-base font-semibold">Bildirim Bulunmuyor</h3>
+          <h3 className="text-base font-semibold">No Notifications</h3>
           <p className="text-sm text-[var(--color-text-faint)] max-w-sm">
-            Şimdilik her şey sakin! Yeni aktiviteler gerçekleştiğinde burada
-            görünecek.
+            Everything is quiet for now! When new activities occur, they will
+            appear here.
           </p>
         </div>
       ) : (
@@ -150,22 +150,22 @@ const NotificationsPage = () => {
                     </Link>{" "}
                     <span className="text-[var(--color-text-muted)]">
                       {notif.type === "follow"
-                        ? "seni takip etmeye başladı."
+                        ? "started following you."
                         : notif.type === "like"
-                          ? "gönderini beğendi."
+                          ? "liked your post."
                           : notif.type === "comment"
-                            ? "gönderine yorum yaptı."
+                            ? "commented on your post."
                             : notif.type === "market_interest"
-                              ? "pazardaki ilanına ilgi duyuyor!"
+                              ? "is interested in your marketplace listing!"
                               : notif.type === "event_invite"
-                                ? "seni bir etkinliğe davet etti."
-                                : notif.message || "seninle etkileşime girdi."}
+                                ? "invited you to an event."
+                                : notif.message || "interacted with you."}
                     </span>
                   </p>
                   <span className="text-xs text-[var(--color-text-faint)] mt-1 block">
                     {formatDistanceToNow(new Date(notif.createdAt), {
                       addSuffix: true,
-                      locale: tr,
+                      locale: enUS,
                     })}
                   </span>
                 </div>

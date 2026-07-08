@@ -19,6 +19,7 @@ import {
 import Avatar from "../components/common/Avatar.jsx";
 import Button from "../components/common/Button.jsx";
 import Modal from "../components/common/Modal.jsx";
+import FollowListModal from "../components/common/FollowListModal.jsx";
 import Input from "../components/common/Input.jsx";
 import PostCard from "../components/feed/PostCard.jsx";
 import { userApi, chatApi } from "../api/index.js";
@@ -39,6 +40,7 @@ const ProfilePage = () => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   // Edit Modal State
+  const [followListType, setFollowListType] = useState(null); // 'followers' | 'following' | null
   const [editOpen, setEditOpen] = useState(false);
   const [editForm, setEditForm] = useState({
     name: "",
@@ -77,7 +79,7 @@ const ProfilePage = () => {
       setPosts(postsData.posts || []);
     } catch (err) {
       console.error(err);
-      toast.error("Profil yüklenirken bir hata oluştu");
+      toast.error("An error occurred while loading profile");
     } finally {
       setLoading(false);
     }
@@ -106,10 +108,10 @@ const ProfilePage = () => {
         return next;
       });
       toast.success(
-        data.following ? `${profileUser.name} takip edildi` : "Takip bırakıldı",
+        data.following ? `Followed ${profileUser.name}` : "Unfollowed",
       );
     } catch {
-      toast.error("İşlem gerçekleştirilemedi");
+      toast.error("Action could not be performed");
     } finally {
       setFollowLoading(false);
     }
@@ -121,7 +123,7 @@ const ProfilePage = () => {
       const { data } = await chatApi.getOrCreateConversation(profileUser._id);
       navigate("/chat");
     } catch (err) {
-      toast.error("Sohbet başlatılamadı");
+      toast.error("Failed to start chat");
     }
   };
 
@@ -129,9 +131,9 @@ const ProfilePage = () => {
     try {
       await logout();
       navigate("/login");
-      toast.success("Başarıyla çıkış yapıldı");
+      toast.success("Logged out successfully");
     } catch (err) {
-      toast.error("Çıkış yapılamadı");
+      toast.error("Failed to log out");
     }
   };
 
@@ -185,11 +187,11 @@ const ProfilePage = () => {
       // Update global context
       updateUser(data.user);
 
-      toast.success("Profil güncellendi");
+      toast.success("Profile updated");
       setEditOpen(false);
     } catch (err) {
       console.error(err);
-      toast.error("Profil güncellenirken hata oluştu");
+      toast.error("Error updating profile");
     } finally {
       setEditLoading(false);
     }
@@ -207,10 +209,10 @@ const ProfilePage = () => {
     return (
       <div className="card p-12 text-center">
         <h3 className="page-heading text-lg text-[var(--color-text)]">
-          Kullanıcı bulunamadı
+          User not found
         </h3>
         <p className="text-sm text-[var(--color-text-faint)] mt-2">
-          Böyle bir profil bulunmuyor veya silinmiş olabilir.
+          This profile does not exist or may have been deleted.
         </p>
       </div>
     );
@@ -230,7 +232,7 @@ const ProfilePage = () => {
               onClick={() => openLightbox(profileUser.coverPhoto)}
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-[#1c46ad] via-[#2258d6] to-[#7458f0]" />
+            <div className="w-full h-full bg-blue-500" />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/15 via-transparent to-transparent pointer-events-none" />
         </div>
@@ -269,9 +271,7 @@ const ProfilePage = () => {
                   <BookOpen size={15} className="text-[var(--color-primary)]" />{" "}
                   {profileUser.department}
                 </span>
-                <span className="chip chip-blue">
-                  {profileUser.year}. Sınıf
-                </span>
+                <span className="chip chip-blue">Year {profileUser.year}</span>
               </div>
             </div>
           </div>
@@ -286,7 +286,7 @@ const ProfilePage = () => {
                   icon={Edit3}
                   onClick={openEditModal}
                 >
-                  Profili Düzenle
+                  Edit Profile
                 </Button>
                 <Button
                   variant="outline"
@@ -295,7 +295,7 @@ const ProfilePage = () => {
                   onClick={handleLogout}
                   className="text-red-500 hover:text-red-600 hover:bg-red-50 border-red-200"
                 >
-                  Çıkış Yap
+                  Logout
                 </Button>
               </>
             ) : (
@@ -307,7 +307,7 @@ const ProfilePage = () => {
                   icon={isFollowing ? UserCheck : UserPlus}
                   onClick={handleFollow}
                 >
-                  {isFollowing ? "Takip Ediliyor" : "Takip Et"}
+                  {isFollowing ? "Following" : "Follow"}
                 </Button>
                 <Button
                   variant="outline"
@@ -315,7 +315,7 @@ const ProfilePage = () => {
                   icon={MessageSquare}
                   onClick={handleMessage}
                 >
-                  Mesaj Gönder
+                  Send Message
                 </Button>
               </>
             )}
@@ -324,30 +324,38 @@ const ProfilePage = () => {
 
         {/* Stats segment */}
         <div className="border-t border-[var(--color-border)] px-6 md:px-8 py-4 flex items-center justify-center md:justify-start gap-8 bg-[var(--color-surface-2)]/60">
-          <div className="text-center md:text-left">
+          <button
+            type="button"
+            onClick={() => setFollowListType("followers")}
+            className="text-center md:text-left hover:opacity-70 transition-opacity"
+          >
             <span className="block page-heading text-lg text-[var(--color-text)]">
               {profileUser.followers?.length || 0}
             </span>
             <span className="text-xs text-[var(--color-text-faint)] font-medium">
-              Takipçi
+              Followers
             </span>
-          </div>
+          </button>
           <div className="w-px h-8 bg-[var(--color-border)]" />
-          <div className="text-center md:text-left">
+          <button
+            type="button"
+            onClick={() => setFollowListType("following")}
+            className="text-center md:text-left hover:opacity-70 transition-opacity"
+          >
             <span className="block page-heading text-lg text-[var(--color-text)]">
               {profileUser.following?.length || 0}
             </span>
             <span className="text-xs text-[var(--color-text-faint)] font-medium">
-              Takip Edilen
+              Following
             </span>
-          </div>
+          </button>
           <div className="w-px h-8 bg-[var(--color-border)]" />
           <div className="text-center md:text-left">
             <span className="block page-heading text-lg text-[var(--color-text)]">
               {posts?.length || 0}
             </span>
             <span className="text-xs text-[var(--color-text-faint)] font-medium">
-              Paylaşım
+              Posts
             </span>
           </div>
         </div>
@@ -358,16 +366,16 @@ const ProfilePage = () => {
         <div className="lg:col-span-1 space-y-6">
           <div className="card p-5 space-y-3">
             <h3 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)]">
-              Hakkımda
+              About Me
             </h3>
             <p className="text-sm leading-relaxed text-[var(--color-text-muted)] whitespace-pre-line">
-              {profileUser.bio || "Henüz bir biyografi yazılmamış."}
+              {profileUser.bio || "No biography written yet."}
             </p>
           </div>
 
           <div className="card p-5 space-y-3">
             <h3 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)] flex items-center gap-1.5">
-              <Tag size={13} /> İlgi Alanları
+              <Tag size={13} /> Interests
             </h3>
             {profileUser.interests?.length > 0 ? (
               <div className="flex flex-wrap gap-1.5">
@@ -379,14 +387,14 @@ const ProfilePage = () => {
               </div>
             ) : (
               <p className="text-xs text-[var(--color-text-faint)]">
-                Hiç ilgi alanı eklenmemiş.
+                No interests added yet.
               </p>
             )}
           </div>
 
           <div className="card p-5 space-y-3">
             <h3 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)] flex items-center gap-1.5">
-              <Calendar size={13} /> Dersler
+              <Calendar size={13} /> Courses
             </h3>
             {profileUser.courses?.length > 0 ? (
               <div className="flex flex-wrap gap-1.5">
@@ -398,7 +406,7 @@ const ProfilePage = () => {
               </div>
             ) : (
               <p className="text-xs text-[var(--color-text-faint)]">
-                Hiç ders bilgisi eklenmemiş.
+                No courses added yet.
               </p>
             )}
           </div>
@@ -407,12 +415,12 @@ const ProfilePage = () => {
         {/* Right column – Posts feed */}
         <div className="lg:col-span-2 space-y-4">
           <h2 className="page-heading text-lg text-[var(--color-text)] px-1">
-            Gönderiler
+            Posts
           </h2>
 
           {posts.length === 0 ? (
             <div className="card p-12 text-center text-[var(--color-text-faint)] text-sm">
-              Henüz bir paylaşım yapılmamış.
+              No posts shared yet.
             </div>
           ) : (
             posts.map((post) => (
@@ -432,12 +440,12 @@ const ProfilePage = () => {
       <Modal
         isOpen={editOpen}
         onClose={() => setEditOpen(false)}
-        title="Profili Düzenle"
+        title="Edit Profile"
       >
         <form onSubmit={handleEditSubmit} className="space-y-6 mt-2">
           <div className="space-y-3">
             <h4 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)]">
-              Görseller
+              Images
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <div className="card p-3.5 flex items-center gap-3">
@@ -452,10 +460,10 @@ const ProfilePage = () => {
                 />
                 <div className="flex flex-col gap-1.5">
                   <span className="text-xs font-semibold text-[var(--color-text-muted)]">
-                    Profil Resmi
+                    Profile Picture
                   </span>
                   <label className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--color-surface-3)] hover:bg-[var(--color-border)] text-xs font-medium text-[var(--color-text-muted)] cursor-pointer transition-colors border border-[var(--color-border)] w-fit">
-                    <Camera size={13} /> Değiştir
+                    <Camera size={13} /> Change
                     <input
                       type="file"
                       accept="image/*"
@@ -480,10 +488,10 @@ const ProfilePage = () => {
                 </div>
                 <div className="flex flex-col gap-1.5">
                   <span className="text-xs font-semibold text-[var(--color-text-muted)]">
-                    Kapak Görseli
+                    Cover Image
                   </span>
                   <label className="inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-full bg-[var(--color-surface-3)] hover:bg-[var(--color-border)] text-xs font-medium text-[var(--color-text-muted)] cursor-pointer transition-colors border border-[var(--color-border)] w-fit">
-                    <Camera size={13} /> Değiştir
+                    <Camera size={13} /> Change
                     <input
                       type="file"
                       accept="image/*"
@@ -498,10 +506,10 @@ const ProfilePage = () => {
 
           <div className="space-y-4">
             <h4 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)]">
-              Genel Bilgiler
+              General Info
             </h4>
             <Input
-              label="Ad Soyad"
+              label="Full Name"
               value={editForm.name}
               onChange={(e) =>
                 setEditForm({ ...editForm, name: e.target.value })
@@ -511,7 +519,7 @@ const ProfilePage = () => {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">
-                Biyografi
+                Biography
               </label>
               <textarea
                 value={editForm.bio}
@@ -519,18 +527,18 @@ const ProfilePage = () => {
                   setEditForm({ ...editForm, bio: e.target.value })
                 }
                 className="input-base min-h-[80px]"
-                placeholder="Kendinden bahset..."
+                placeholder="Tell us about yourself..."
               />
             </div>
           </div>
 
           <div className="space-y-4">
             <h4 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)]">
-              Akademik Bilgiler
+              Academic Info
             </h4>
             <div className="grid grid-cols-2 gap-4">
               <Input
-                label="Üniversite"
+                label="University"
                 value={editForm.university}
                 onChange={(e) =>
                   setEditForm({ ...editForm, university: e.target.value })
@@ -539,7 +547,7 @@ const ProfilePage = () => {
               />
 
               <Input
-                label="Bölüm"
+                label="Department"
                 value={editForm.department}
                 onChange={(e) =>
                   setEditForm({ ...editForm, department: e.target.value })
@@ -550,7 +558,7 @@ const ProfilePage = () => {
 
             <div>
               <label className="block text-xs font-semibold uppercase tracking-wider text-[var(--color-text-muted)] mb-2">
-                Sınıf
+                Class / Year
               </label>
               <select
                 value={editForm.year}
@@ -559,30 +567,30 @@ const ProfilePage = () => {
                 }
                 className="input-base"
               >
-                <option value="1">1. Sınıf</option>
-                <option value="2">2. Sınıf</option>
-                <option value="3">3. Sınıf</option>
-                <option value="4">4. Sınıf</option>
-                <option value="5">Lisansüstü</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+                <option value="5">Graduate</option>
               </select>
             </div>
           </div>
 
           <div className="space-y-4">
             <h4 className="page-heading text-xs uppercase tracking-wider text-[var(--color-text-faint)]">
-              İlgi Alanları & Dersler
+              Interests & Courses
             </h4>
             <Input
-              label="İlgi Alanları (Virgülle ayırın)"
+              label="Interests (Comma separated)"
               value={editForm.interests}
               onChange={(e) =>
                 setEditForm({ ...editForm, interests: e.target.value })
               }
-              placeholder="Müzik, Yüzme, Kodlama..."
+              placeholder="Music, Swimming, Coding..."
             />
 
             <Input
-              label="Dersler (Virgülle ayırın)"
+              label="Courses (Comma separated)"
               value={editForm.courses}
               onChange={(e) =>
                 setEditForm({ ...editForm, courses: e.target.value })
@@ -598,7 +606,7 @@ const ProfilePage = () => {
               type="button"
               onClick={() => setEditOpen(false)}
             >
-              İptal
+              Cancel
             </Button>
             <Button
               variant="primary"
@@ -606,11 +614,18 @@ const ProfilePage = () => {
               type="submit"
               loading={editLoading}
             >
-              Kaydet
+              Save
             </Button>
           </div>
         </form>
       </Modal>
+
+      <FollowListModal
+        isOpen={!!followListType}
+        onClose={() => setFollowListType(null)}
+        userId={profileUser._id}
+        type={followListType || "followers"}
+      />
     </div>
   );
 };

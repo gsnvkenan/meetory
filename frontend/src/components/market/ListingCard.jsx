@@ -8,20 +8,20 @@ import { useLightboxStore } from "../../context/useLightboxStore.js";
 import toast from "react-hot-toast";
 
 const categoryLabels = {
-  notes: { text: "Ders Notu", chip: "chip-emerald" },
-  book: { text: "Kitap", chip: "chip-blue" },
-  electronics: { text: "Elektronik", chip: "chip-violet" },
-  clothing: { text: "Giyim", chip: "chip-rose" },
-  furniture: { text: "Eşya/Mobilya", chip: "chip-amber" },
-  other: { text: "Diğer", chip: "chip-slate" },
+  notes: { text: "Lecture Notes", chip: "chip-emerald" },
+  book: { text: "Book", chip: "chip-blue" },
+  electronics: { text: "Electronics", chip: "chip-violet" },
+  clothing: { text: "Clothing", chip: "chip-rose" },
+  furniture: { text: "Furniture/Item", chip: "chip-amber" },
+  other: { text: "Other", chip: "chip-slate" },
 };
 
 const conditionLabels = {
-  new: "Sıfır",
-  like_new: "Yeni Gibi",
-  good: "İyi",
-  fair: "Orta",
-  poor: "Yıpranmış",
+  new: "New",
+  like_new: "Like New",
+  good: "Good",
+  fair: "Fair",
+  poor: "Poor",
 };
 
 const ListingCard = ({ listing, onDelete }) => {
@@ -40,23 +40,23 @@ const ListingCard = ({ listing, onDelete }) => {
       // 1. Create or get existing conversation
       await chatApi.getOrCreateConversation(listing.seller._id);
       // 2. Redirect to chat
-      toast.success("Satıcı ile sohbet başlatıldı 💬");
+      toast.success("Started chat with seller 💬");
       navigate("/chat");
     } catch {
-      toast.error("Bağlantı kurulamadı");
+      toast.error("Failed to connect");
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Bu ilanı silmek istediğine emin misin?")) return;
+    if (!window.confirm("Are you sure you want to delete this listing?")) return;
     try {
       await marketApi.deleteListing(listing._id);
-      toast.success("İlan kaldırıldı");
+      toast.success("Listing removed");
       if (onDelete) onDelete(listing._id);
     } catch {
-      toast.error("İlan silinemedi");
+      toast.error("Failed to delete listing");
     }
   };
 
@@ -72,10 +72,10 @@ const ListingCard = ({ listing, onDelete }) => {
             onClick={() => openLightbox(listing.images[0])}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-[var(--color-surface-2)] to-[var(--color-surface-3)] flex items-center justify-center gap-2 text-[var(--color-text-faint)]">
+          <div className="w-full h-full bg-[var(--color-surface-2)] flex items-center justify-center gap-2 text-[var(--color-text-faint)]">
             <ShoppingBag size={20} />
             <span className="font-bold text-xs tracking-wider uppercase">
-              Fotoğraf Yok
+              No Image
             </span>
           </div>
         )}
@@ -89,20 +89,19 @@ const ListingCard = ({ listing, onDelete }) => {
 
         {/* Price tag */}
         <span
-          className={`chip absolute bottom-3 right-3 shadow-md border-transparent ${
-            listing.isFree
-              ? "bg-gradient-to-br from-[#12b76a] to-[#0d9488] text-white"
-              : "bg-gradient-to-br from-[#2258d6] to-[#4c6ef0] text-white"
-          }`}
+          className={`chip absolute bottom-3 right-3 shadow-md border-transparent ${listing.isFree
+              ? "bg-emerald-500 text-white"
+              : "bg-blue-500 text-white"
+            }`}
         >
-          {listing.isFree ? "Ücretsiz" : `${listing.price} TL`}
+          {listing.isFree ? "Free" : `${listing.price} GEL`}
         </span>
 
         {/* Seller delete button */}
         {isSeller && (
           <button
             onClick={handleDelete}
-            title="İlanı Sil"
+            title="Delete Listing"
             className="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/45 hover:bg-red-500/90 text-white flex items-center justify-center transition-colors backdrop-blur-sm"
           >
             <Trash2 size={14} />
@@ -118,11 +117,11 @@ const ListingCard = ({ listing, onDelete }) => {
               {listing.title}
             </h3>
             <span className="chip chip-slate shrink-0">
-              {conditionLabels[listing.condition] || "İyi"}
+              {conditionLabels[listing.condition] || "Good"}
             </span>
           </div>
           <p className="text-xs text-[var(--color-text-faint)] line-clamp-2 mt-1.5">
-            {listing.description || "Açıklama belirtilmemiş."}
+            {listing.description || "No description specified."}
           </p>
         </div>
 
@@ -135,7 +134,7 @@ const ListingCard = ({ listing, onDelete }) => {
             />
             <span className="truncate">
               {listing.campus
-                ? `${listing.campus} Kampüsü`
+                ? `${listing.campus} Campus`
                 : listing.university}
             </span>
           </div>
@@ -149,7 +148,7 @@ const ListingCard = ({ listing, onDelete }) => {
               icon={MessageSquare}
               className="shrink-0"
             >
-              Satıcıya Yaz
+              Contact Seller
             </Button>
           )}
         </div>

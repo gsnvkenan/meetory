@@ -17,10 +17,10 @@ const UserCard = ({ recommendation }) => {
       await userApi.toggleFollow(user._id);
       setFollowing((p) => !p);
       toast.success(
-        following ? "Takipten çıkıldı" : `${user.name} takip edildi`,
+        following ? "Unfollowed" : `Followed ${user.name}`,
       );
     } catch {
-      toast.error("İşlem başarısız");
+      toast.error("Action failed");
     } finally {
       setLoading(false);
     }
@@ -59,7 +59,7 @@ const UserCard = ({ recommendation }) => {
           {user.university}
         </p>
         <p className="text-xs text-[var(--color-text-faint)]">
-          {user.department} · {user.year}. Sınıf
+          {user.department} · Year {user.year}
         </p>
       </div>
 
@@ -95,7 +95,7 @@ const UserCard = ({ recommendation }) => {
         icon={following ? UserCheck : UserPlus}
         className="mt-auto w-full"
       >
-        {following ? "Takip Ediliyor" : "Takip Et"}
+        {following ? "Following" : "Follow"}
       </Button>
     </div>
   );

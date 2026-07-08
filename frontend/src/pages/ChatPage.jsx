@@ -26,7 +26,7 @@ const ChatPage = () => {
         if (updatedActive) setActiveConversation(updatedActive);
       }
     } catch (err) {
-      console.error("Konuşmalar yüklenirken hata:", err);
+      console.error("Error loading conversations:", err);
     } finally {
       setLoading(false);
     }
@@ -91,13 +91,13 @@ const ChatPage = () => {
       >
         <div className="px-5 py-4 border-b border-[var(--color-border)] shrink-0">
           <h1 className="page-heading text-xl flex items-center gap-2 text-[var(--color-text)]">
-            Mesajlar
+            Messages
             <span className="w-7 h-7 rounded-lg bg-[var(--color-primary)]/10 text-[var(--color-primary)] flex items-center justify-center">
               <MessageSquare size={15} />
             </span>
           </h1>
           <p className="text-xs text-[var(--color-text-faint)] mt-1">
-            Öğrencilerle kurduğun iletişim kutusu
+            Your conversations with other students
           </p>
         </div>
 
@@ -130,16 +130,15 @@ const ChatPage = () => {
           />
         ) : (
           <div className="text-center px-10 py-12 flex flex-col items-center gap-4 max-w-sm mx-auto">
-            <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[var(--color-primary)]/12 to-violet-500/12 flex items-center justify-center text-[var(--color-primary)]">
+            <div className="w-20 h-20 rounded-3xl bg-blue-500/10 flex items-center justify-center text-blue-500">
               <MessageSquare size={30} />
             </div>
             <h3 className="page-heading text-xl text-[var(--color-text)]">
-              Sohbet Seçin
+              Select a Chat
             </h3>
             <p className="text-sm text-[var(--color-text-faint)] leading-relaxed">
-              Sohbet etmek için sol taraftaki listeden bir arkadaşını seçebilir
-              veya Keşfet sekmesinden yeni profiller bulup mesaj
-              gönderebilirsin.
+              You can select a friend from the list on the left to chat, or find
+              new profiles on the Discover tab and send them a message.
             </p>
           </div>
         )}

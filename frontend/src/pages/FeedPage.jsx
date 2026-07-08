@@ -39,7 +39,7 @@ const FeedPage = () => {
         }
         setHasMore(pageNum < data.pagination.pages);
       } catch (err) {
-        toast.error("Akış yüklenirken hata oluştu.");
+        toast.error("Error loading feed.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -82,13 +82,13 @@ const FeedPage = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="page-heading text-2xl md:text-3xl flex items-center gap-2.5">
-            Ana Akış
-            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500/12 to-violet-500/12 text-indigo-500">
+            Main Feed
+            <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-500/10 text-blue-500">
               <Sparkles size={16} />
             </span>
           </h1>
           <p className="text-sm text-[var(--color-text-faint)] mt-1">
-            {user?.university} Kampüsü'nde neler oluyor?
+            What's happening in {user?.university} Campus?
           </p>
         </div>
 
@@ -98,21 +98,21 @@ const FeedPage = () => {
             onClick={() => setTab("campus")}
             className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
               tab === "campus"
-                ? "bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-md"
+                ? "bg-blue-500 text-white shadow-md"
                 : "text-[var(--color-text-faint)] hover:text-[var(--color-text)]"
             }`}
           >
-            Kampüsüm
+            My Campus
           </button>
           <button
             onClick={() => setTab("following")}
             className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
               tab === "following"
-                ? "bg-gradient-to-br from-indigo-600 to-violet-600 text-white shadow-md"
+                ? "bg-blue-500 text-white shadow-md"
                 : "text-[var(--color-text-faint)] hover:text-[var(--color-text)]"
             }`}
           >
-            Takip Ettiklerim
+            Following
           </button>
         </div>
       </div>
@@ -127,14 +127,14 @@ const FeedPage = () => {
         </div>
       ) : posts.length === 0 ? (
         <div className="card p-12 text-center flex flex-col items-center gap-3">
-          <div className="w-14 h-14 rounded-full bg-gradient-to-br from-indigo-500/10 to-violet-500/10 flex items-center justify-center text-2xl">
+          <div className="w-14 h-14 rounded-full bg-blue-500/10 flex items-center justify-center text-2xl">
             👋
           </div>
-          <h3 className="text-base font-semibold">Burası biraz sessiz...</h3>
+          <h3 className="text-base font-semibold">It's a bit quiet here...</h3>
           <p className="text-sm text-[var(--color-text-faint)] max-w-sm">
             {tab === "campus"
-              ? "Henüz kampüsünde paylaşılmış bir gönderi yok. İlk paylaşımı sen yap!"
-              : "Henüz takip ettiğin kimse yok veya takip ettiklerin henüz paylaşım yapmadı."}
+              ? "There are no posts shared on your campus yet. Be the first to share!"
+              : "You are not following anyone yet, or they haven't posted anything."}
           </p>
         </div>
       ) : (

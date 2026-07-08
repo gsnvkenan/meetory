@@ -1,5 +1,6 @@
-import Event from '../models/Event.js';
-import { getFileUrl } from '../middleware/upload.js';
+import Event from "../models/Event.js";
+import { getFileUrl } from "../middleware/upload.js";
+import { emitToAll } from "../services/socketService.js";
 
 // ─── Get all events (campus filtered) ────────────────────────────────────────
 export const getEvents = async (req, res, next) => {
@@ -20,8 +21,8 @@ export const getEvents = async (req, res, next) => {
       .sort({ startDate: 1 })
       .skip(skip)
       .limit(parseInt(limit))
-      .populate('creator', 'name username avatar')
-      .populate('attendees', 'name username avatar');
+      .populate("creator", "name username avatar")
+      .populate("attendees", "name username avatar");
 
     const total = await Event.countDocuments(filter);
 
@@ -39,9 +40,9 @@ export const getEvents = async (req, res, next) => {
 export const getEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id)
-      .populate('creator', 'name username avatar')
-      .populate('attendees', 'name username avatar');
-    if (!event) return res.status(404).json({ message: 'Event not found' });
+      .populate("creator", "name username avatar")
+      .populate("attendees", "name username avatar");
+    if (!event) return res.status(404).json({ message: "Event not found" });
     res.json({ success: true, event });
   } catch (error) {
     next(error);
@@ -52,11 +53,20 @@ export const getEvent = async (req, res, next) => {
 export const createEvent = async (req, res, next) => {
   try {
     const {
-      title, description, category, startDate, endDate,
-      locationName, campus, maxAttendees, isOnline, onlineLink, tags,
+      title,
+      description,
+      category,
+      startDate,
+      endDate,
+      locationName,
+      campus,
+      maxAttendees,
+      isOnline,
+      onlineLink,
+      tags,
     } = req.body;
 
-    const coverImage = req.file ? getFileUrl(req.file) : '';
+    const coverImage = req.file ? getFileUrl(req.file) : "";
 
     const event = await Event.create({
       creator: req.user._id,
@@ -66,18 +76,20 @@ export const createEvent = async (req, res, next) => {
       startDate,
       endDate,
       locationName,
-      campus: campus || req.user.location?.campus || '',
+      campus: campus || req.user.location?.campus || "",
       university: req.user.university,
       coverImage,
       maxAttendees,
-      isOnline: isOnline === 'true',
+      isOnline: isOnline === "true",
       onlineLink,
       tags: tags ? JSON.parse(tags) : [],
       attendees: [req.user._id],
     });
 
-    await event.populate('creator', 'name username avatar');
+    await event.populate("creator", "name username avatar");
     res.status(201).json({ success: true, event });
+
+    emitToAll("event:created", event);
   } catch (error) {
     next(error);
   }
@@ -87,22 +99,36 @@ export const createEvent = async (req, res, next) => {
 export const toggleAttend = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
-    if (!event) return res.status(404).json({ message: 'Event not found' });
+    if (!event) return res.status(404).json({ message: "Event not found" });
 
     const userId = req.user._id;
-    const isAttending = event.attendees.some((id) => String(id) === String(userId));
+    const isAttending = event.attendees.some(
+      (id) => String(id) === String(userId),
+    );
 
     if (isAttending) {
       event.attendees.pull(userId);
     } else {
       if (event.maxAttendees && event.attendees.length >= event.maxAttendees) {
-        return res.status(400).json({ message: 'Event is full' });
+        return res.status(400).json({ message: "Event is full" });
       }
       event.attendees.addToSet(userId);
     }
 
     await event.save();
-    res.json({ success: true, attending: !isAttending, attendeeCount: event.attendees.length });
+    res.json({
+      success: true,
+      attending: !isAttending,
+      attendeeCount: event.attendees.length,
+    });
+
+    await event.populate("attendees", "name username avatar");
+    emitToAll("event:attendance", {
+      eventId: event._id,
+      university: event.university,
+      attendees: event.attendees,
+      attendeeCount: event.attendees.length,
+    });
   } catch (error) {
     next(error);
   }
@@ -112,21 +138,34 @@ export const toggleAttend = async (req, res, next) => {
 export const updateEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
-    if (!event) return res.status(404).json({ message: 'Event not found' });
+    if (!event) return res.status(404).json({ message: "Event not found" });
     if (String(event.creator) !== String(req.user._id)) {
-      return res.status(403).json({ message: 'Not authorized' });
+      return res.status(403).json({ message: "Not authorized" });
     }
 
     const allowedFields = [
-      'title', 'description', 'category', 'startDate', 'endDate',
-      'locationName', 'campus', 'maxAttendees', 'isOnline', 'onlineLink', 'tags',
+      "title",
+      "description",
+      "category",
+      "startDate",
+      "endDate",
+      "locationName",
+      "campus",
+      "maxAttendees",
+      "isOnline",
+      "onlineLink",
+      "tags",
     ];
     allowedFields.forEach((f) => {
       if (req.body[f] !== undefined) event[f] = req.body[f];
     });
 
     await event.save();
+    await event.populate("creator", "name username avatar");
+    await event.populate("attendees", "name username avatar");
     res.json({ success: true, event });
+
+    emitToAll("event:updated", event);
   } catch (error) {
     next(error);
   }
@@ -136,12 +175,15 @@ export const updateEvent = async (req, res, next) => {
 export const deleteEvent = async (req, res, next) => {
   try {
     const event = await Event.findById(req.params.id);
-    if (!event) return res.status(404).json({ message: 'Event not found' });
+    if (!event) return res.status(404).json({ message: "Event not found" });
     if (String(event.creator) !== String(req.user._id)) {
-      return res.status(403).json({ message: 'Not authorized' });
+      return res.status(403).json({ message: "Not authorized" });
     }
+    const { _id: eventId, university } = event;
     await event.deleteOne();
-    res.json({ success: true, message: 'Event deleted' });
+    res.json({ success: true, message: "Event deleted" });
+
+    emitToAll("event:deleted", { eventId, university });
   } catch (error) {
     next(error);
   }

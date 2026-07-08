@@ -35,11 +35,11 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.title.trim()) {
-      toast.error("Etkinlik başlığı gereklidir");
+      toast.error("Event title is required");
       return;
     }
     if (!form.startDate) {
-      toast.error("Etkinlik tarihi gereklidir");
+      toast.error("Event date is required");
       return;
     }
 
@@ -64,7 +64,7 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
       }
 
       const { data } = await eventApi.createEvent(fd);
-      toast.success("Etkinlik oluşturuldu! 📅");
+      toast.success("Event created! 📅");
       if (onCreated) onCreated(data.event);
       // Reset form
       setForm({
@@ -83,7 +83,7 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
     } catch (err) {
       console.error(err);
       toast.error(
-        err?.response?.data?.message || "Etkinlik oluşturulurken hata oluştu.",
+        err?.response?.data?.message || "An error occurred while creating event.",
       );
     } finally {
       setLoading(false);
@@ -94,7 +94,7 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title="Yeni Etkinlik Oluştur"
+      title="Create New Event"
       size="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-5">
@@ -113,10 +113,10 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
           </div>
           <div className="min-w-0">
             <p className="text-xs font-semibold text-[var(--color-text)] mb-1.5">
-              Kapak Görseli
+              Cover Image
             </p>
             <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-surface)] hover:bg-[var(--color-surface-3)] text-xs font-semibold text-[var(--color-text-muted)] cursor-pointer transition-colors border border-[var(--color-border)]">
-              <Camera size={13} /> Görsel Seç
+              <Camera size={13} /> Select Image
               <input
                 type="file"
                 accept="image/*"
@@ -128,16 +128,16 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
         </div>
 
         <Input
-          label="Etkinlik Başlığı"
+          label="Event Title"
           required
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
-          placeholder="Örn: Algoritma Yarışması Tanıtım Toplantısı"
+          placeholder="e.g. Algorithm Competition Info Session"
         />
 
         <div className="grid grid-cols-2 gap-3">
           <Input
-            label="Tarih & Saat"
+            label="Date & Time"
             type="datetime-local"
             required
             value={form.startDate}
@@ -145,20 +145,20 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
           />
           <div className="flex flex-col gap-1.5 w-full">
             <label className="text-sm font-semibold text-[var(--color-text-muted)]">
-              Kategori
+              Category
             </label>
             <select
               className="input-base cursor-pointer"
               value={form.category}
               onChange={(e) => setForm({ ...form, category: e.target.value })}
             >
-              <option value="other">Kategori Seçin</option>
-              <option value="seminar">Seminer / Panel</option>
-              <option value="workshop">Atölye / Workshop</option>
-              <option value="hackathon">Hackathon / Proje</option>
-              <option value="social">Sosyal Etkinlik</option>
-              <option value="sport">Spor</option>
-              <option value="concert">Konser / Tiyatro</option>
+              <option value="other">Select Category</option>
+              <option value="club">Club</option>
+              <option value="party">Party / Fun</option>
+              <option value="study">Study</option>
+              <option value="sport">Sport</option>
+              <option value="seminar">Seminar / Panel</option>
+              <option value="hackathon">Hackathon</option>
             </select>
           </div>
         </div>
@@ -175,13 +175,13 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
             onChange={(e) => setForm({ ...form, isOnline: e.target.checked })}
           />
           <span className="text-sm font-medium text-[var(--color-text-muted)]">
-            Online Etkinlik (Zoom, Teams, Meet vb.)
+            Online Event (Zoom, Teams, Meet, etc.)
           </span>
         </label>
 
         {form.isOnline ? (
           <Input
-            label="Etkinlik Bağlantısı (Link)"
+            label="Event Link"
             value={form.onlineLink}
             onChange={(e) => setForm({ ...form, onlineLink: e.target.value })}
             placeholder="https://..."
@@ -190,8 +190,8 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             <Input
-              label="Konum / Mekan"
-              placeholder="Örn: D Blok Konferans Salonu"
+              label="Location / Venue"
+              placeholder="e.g. D Block Conference Hall"
               icon={MapPin}
               value={form.locationName}
               onChange={(e) =>
@@ -199,8 +199,8 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
               }
             />
             <Input
-              label="Kampüs"
-              placeholder="Örn: Davutpaşa"
+              label="Campus"
+              placeholder="e.g. Campus name"
               icon={BookOpen}
               value={form.campus}
               onChange={(e) => setForm({ ...form, campus: e.target.value })}
@@ -210,12 +210,12 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
 
         <div className="flex flex-col gap-1.5 w-full">
           <label className="text-sm font-semibold text-[var(--color-text-muted)]">
-            Açıklama
+            Description
           </label>
           <textarea
             className="input-base min-h-20 max-h-32 resize-y"
             rows={3}
-            placeholder="Etkinlik detayları, katılım koşulları vb..."
+            placeholder="Event details, entry requirements, etc..."
             value={form.description}
             onChange={(e) => setForm({ ...form, description: e.target.value })}
           />
@@ -223,10 +223,10 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
 
         <div className="w-1/2">
           <Input
-            label="Kontenjan Sınırı"
+            label="Capacity Limit"
             type="number"
             min={1}
-            placeholder="Sınırsız"
+            placeholder="Unlimited"
             icon={Users}
             value={form.maxAttendees}
             onChange={(e) => setForm({ ...form, maxAttendees: e.target.value })}
@@ -235,10 +235,10 @@ const CreateEventModal = ({ isOpen, onClose, onCreated }) => {
 
         <div className="flex justify-end gap-2 pt-4 border-t border-[var(--color-border)]">
           <Button variant="secondary" size="sm" type="button" onClick={onClose}>
-            Vazgeç
+            Cancel
           </Button>
           <Button variant="primary" size="sm" type="submit" loading={loading}>
-            Oluştur
+            Create
           </Button>
         </div>
       </form>

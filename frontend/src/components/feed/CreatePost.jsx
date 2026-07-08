@@ -46,9 +46,9 @@ const CreatePost = ({ onCreated }) => {
       setContent("");
       setFiles([]);
       setPreviews([]);
-      toast.success("Gönderi paylaşıldı!");
+      toast.success("Post shared!");
     } catch {
-      toast.error("Gönderi paylaşılamadı");
+      toast.error("Failed to share post");
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ const CreatePost = ({ onCreated }) => {
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            placeholder="Kampüste ne var? Paylaş..."
+            placeholder="What's on campus? Share..."
             rows={3}
             className="w-full bg-transparent text-[15px] leading-relaxed resize-none outline-none text-[var(--color-text)] placeholder:text-[var(--color-text-faint)]"
           />
@@ -102,7 +102,7 @@ const CreatePost = ({ onCreated }) => {
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 className="p-2.5 rounded-full text-indigo-500 hover:bg-indigo-500/10 transition-colors"
-                title="Fotoğraf ekle"
+                title="Add image"
               >
                 <Image size={19} />
               </button>
@@ -110,7 +110,7 @@ const CreatePost = ({ onCreated }) => {
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 className="p-2.5 rounded-full text-indigo-500 hover:bg-indigo-500/10 transition-colors"
-                title="Video ekle"
+                title="Add video"
               >
                 <Video size={19} />
               </button>
@@ -135,11 +135,11 @@ const CreatePost = ({ onCreated }) => {
               >
                 {visibility === "public" ? (
                   <>
-                    <Globe size={13} /> Genel
+                    <Globe size={13} /> Public
                   </>
                 ) : (
                   <>
-                    <Users size={13} /> Takipçiler
+                    <Users size={13} /> Followers
                   </>
                 )}
               </button>
@@ -152,7 +152,7 @@ const CreatePost = ({ onCreated }) => {
               disabled={!content.trim() && files.length === 0}
               icon={Send}
             >
-              Paylaş
+              Share
             </Button>
           </div>
         </div>

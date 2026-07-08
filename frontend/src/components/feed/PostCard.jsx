@@ -10,7 +10,7 @@ import {
   SendHorizontal,
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { tr } from "date-fns/locale";
+import { enUS } from "date-fns/locale";
 import Avatar from "../common/Avatar.jsx";
 import { postApi } from "../../api/index.js";
 import { useAuth } from "../../context/AuthContext.jsx";
@@ -48,7 +48,7 @@ const PostCard = ({ post, onDelete, onBookmarkToggle }) => {
     setBookmarked(nextState);
     try {
       await postApi.toggleBookmark(post._id);
-      toast.success(nextState ? "Kaydedildi" : "Kaydedilenlerden çıkarıldı");
+      toast.success(nextState ? "Saved" : "Removed from saved posts");
       onBookmarkToggle?.(post._id, nextState);
     } catch {
       setBookmarked(!nextState);
@@ -58,10 +58,10 @@ const PostCard = ({ post, onDelete, onBookmarkToggle }) => {
   const handleDelete = async () => {
     try {
       await postApi.deletePost(post._id);
-      toast.success("Gönderi silindi");
+      toast.success("Post deleted");
       onDelete?.(post._id);
     } catch {
-      toast.error("Silinemedi");
+      toast.error("Failed to delete");
     }
     setShowMenu(false);
   };
@@ -74,14 +74,14 @@ const PostCard = ({ post, onDelete, onBookmarkToggle }) => {
       setComments((p) => [...p, data.comment]);
       setComment("");
     } catch {
-      toast.error("Yorum eklenemedi");
+      toast.error("Failed to add comment");
     }
   };
 
   const author = post.author;
   const timeAgo = formatDistanceToNow(new Date(post.createdAt), {
     addSuffix: true,
-    locale: tr,
+    locale: enUS,
   });
 
   return (
@@ -117,7 +117,7 @@ const PostCard = ({ post, onDelete, onBookmarkToggle }) => {
                   onClick={handleDelete}
                   className="flex items-center gap-2 w-full px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-500/10 rounded-xl transition-colors"
                 >
-                  <Trash2 size={14} /> Sil
+                  <Trash2 size={14} /> Delete
                 </button>
               )}
               <button
@@ -125,12 +125,12 @@ const PostCard = ({ post, onDelete, onBookmarkToggle }) => {
                   navigator.clipboard.writeText(
                     window.location.origin + `/post/${post._id}`,
                   );
-                  toast.success("Bağlantı kopyalandı");
+                  toast.success("Link copied");
                   setShowMenu(false);
                 }}
                 className="flex items-center gap-2 w-full px-3 py-2 text-sm font-medium text-[var(--color-text-muted)] hover:bg-[var(--color-surface-2)] rounded-xl transition-colors"
               >
-                <Share2 size={14} /> Paylaş
+                <Share2 size={14} /> Share
               </button>
             </div>
           )}
@@ -241,7 +241,7 @@ const PostCard = ({ post, onDelete, onBookmarkToggle }) => {
                 type="text"
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                placeholder="Yorum yaz..."
+                placeholder="Write a comment..."
                 className="input-base !rounded-full pr-10 py-2 text-sm"
               />
               <button

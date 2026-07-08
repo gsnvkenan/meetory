@@ -14,13 +14,13 @@ import { useAuth } from "../context/AuthContext.jsx";
 import toast from "react-hot-toast";
 
 const categories = [
-  { value: "", label: "Tüm İlanlar" },
-  { value: "notes", label: "Ders Notu" },
-  { value: "book", label: "Kitap" },
-  { value: "electronics", label: "Elektronik" },
-  { value: "clothing", label: "Giyim" },
-  { value: "furniture", label: "Eşya" },
-  { value: "other", label: "Diğer" },
+  { value: "", label: "All Listings" },
+  { value: "notes", label: "Lecture Notes" },
+  { value: "book", label: "Book" },
+  { value: "electronics", label: "Electronics" },
+  { value: "clothing", label: "Clothing" },
+  { value: "furniture", label: "Furniture" },
+  { value: "other", label: "Other" },
 ];
 
 const MarketPage = () => {
@@ -43,7 +43,7 @@ const MarketPage = () => {
       setListings(data.listings || []);
     } catch (err) {
       console.error(err);
-      toast.error("İlanlar yüklenirken hata oluştu.");
+      toast.error("Error loading listings.");
     } finally {
       setLoading(false);
     }
@@ -76,11 +76,10 @@ const MarketPage = () => {
           </div>
           <div>
             <h1 className="page-heading text-2xl sm:text-3xl text-[var(--color-text)]">
-              Öğrenci Pazarı
+              Student Market
             </h1>
             <p className="text-sm text-[var(--color-text-faint)] mt-1">
-              Ders notu, kitap veya eşyalarını sat, satın al ya da ücretsiz
-              paylaş
+              Sell, buy, or share lecture notes, books, or items for free
             </p>
           </div>
         </div>
@@ -90,7 +89,7 @@ const MarketPage = () => {
           icon={Plus}
           className="shrink-0"
         >
-          İlan Ver
+          Post a Listing
         </Button>
       </div>
 
@@ -107,7 +106,7 @@ const MarketPage = () => {
               onClick={() => setCategoryFilter(cat.value)}
               className={`chip px-4 py-2 text-xs transition-all ${
                 categoryFilter === cat.value
-                  ? "bg-gradient-to-br from-[#2258d6] to-[#4c6ef0] border-transparent text-white shadow-md"
+                  ? "bg-blue-500 border-transparent text-white shadow-md"
                   : "chip-slate hover:text-[var(--color-text)] hover:border-[var(--color-primary)]/25"
               }`}
             >
@@ -129,7 +128,7 @@ const MarketPage = () => {
             className="accent-[var(--color-primary)] w-4 h-4 rounded cursor-pointer"
           />
           <span className="text-xs font-semibold text-[var(--color-text-muted)]">
-            Sadece ücretsiz paylaşılan ilanları göster
+            Only show free listings
           </span>
         </label>
       </div>
@@ -145,12 +144,12 @@ const MarketPage = () => {
             <ShoppingBag size={24} />
           </div>
           <h3 className="text-base font-bold page-heading">
-            Aktif İlan Bulunmuyor
+            No Active Listings
           </h3>
           <p className="text-sm text-[var(--color-text-faint)] max-w-sm">
             {categoryFilter
-              ? "Seçilen kategoride şu an aktif bir ilan bulunmuyor."
-              : "Henüz yayında olan bir ilan bulunmuyor. İlk ilanı vererek satışa başla!"}
+              ? "There are currently no active listings in the selected category."
+              : "There are no listings published yet. Start selling by posting the first listing!"}
           </p>
           <Button
             onClick={() => setModalOpen(true)}
@@ -158,7 +157,7 @@ const MarketPage = () => {
             size="sm"
             className="mt-1"
           >
-            İlk İlanı Oluştur
+            Create First Listing
           </Button>
         </div>
       ) : (
